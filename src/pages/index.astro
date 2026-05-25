@@ -1,11 +1,654 @@
 ---
-import Welcome from '../components/Welcome.astro';
-import Layout from '../layouts/Layout.astro';
+import Layout from "../layouts/Layout.astro";
 
-// Welcome to Astro! Wondering what to do next? Check out the Astro documentation at https://docs.astro.build
-// Don't want to use any of this? Delete everything in this file, the `assets`, `components`, and `layouts` directories, and start fresh.
+const kategorie = [
+    { nazwa: "O nas", opis: "Wszystkie mniej lub bardziej interesujące sprawy.", slug: "o-nas" },
+    { nazwa: "Nasze produkty", opis: "Materiały, techniki wykonania i ciekawostki.", slug: "produkty" },
+    { nazwa: "Jak zamówić", opis: "Przewodnik krok po kroku jak złożyć zamówienie.", slug: "zamawianie" },
+    { nazwa: "Przygotowanie", opis: "Wskazówki dotyczące przygotowania projektów.", slug: "przygotowanie" },
+    { nazwa: "Czas realizacji", opis: "Terminy oraz dostępne metody dostawy.", slug: "dostawa" },
+    { nazwa: "Reklamacje i zwroty", opis: "Mamy nadzieję, że ten dział to tylko zbędna formalność.", slug: "reklamacje" },
+    { nazwa: "Dla firm", opis: "Program partnerski i wsparcie B2B.", slug: "dla-firm" },
+    { nazwa: "Kontakt i wsparcie", opis: "Godziny pracy i formularz kontaktowy.", slug: "wsparcie" },
+];
+
+const faqItems = [
+    "Czy mogę złożyć zamówienie przez e-mail?",
+    "Ile czasu trwa realizacja zamówienia?",
+    "Jaka jest minimalna wielkość zamówienia?",
+    "Czy mogę zwrócić zamówiony produkt?",
+    "Jak mogę zapłacić?",
+];
+
+// Figma asset URLs — ważne przez 7 dni od wygenerowania
+const a = {
+    navLogo:       "https://www.figma.com/api/mcp/asset/2bad7385-fc52-4626-9c48-9dec182f13c8",
+    cardIcon:      "https://www.figma.com/api/mcp/asset/060bf7a5-1f01-4ec2-95e1-9d1580848bd3",
+    partner1:      "https://www.figma.com/api/mcp/asset/86529a6b-a641-4126-b048-3abf52be0449",
+    partner2:      "https://www.figma.com/api/mcp/asset/a3228235-b8cc-44c9-af54-dd1735d5044a",
+    partner3:      "https://www.figma.com/api/mcp/asset/6db90c28-86f8-4fef-a779-24cfa4513f1a",
+    partner4:      "https://www.figma.com/api/mcp/asset/58809ec3-6c09-4272-8f36-65cd2e434a78",
+    faqAvatar1:    "https://www.figma.com/api/mcp/asset/e74f7c84-7dde-4dcd-ae0f-8d2730b2982a",
+    faqAvatar2:    "https://www.figma.com/api/mcp/asset/5206f379-3627-4a34-b6fc-87a9e81fc719",
+    faqAvatar3:    "https://www.figma.com/api/mcp/asset/ef0eb1fa-12ec-4c98-acc7-e363e9a2c047",
+    footerMark:    "https://www.figma.com/api/mcp/asset/dcfbceea-6c5e-46ac-8c85-c0d2dd155360",
+    payVisa:       "https://www.figma.com/api/mcp/asset/ca2b9ddf-dd7e-4959-9ca3-20b59a9f1bd4",
+    payMastercard: "https://www.figma.com/api/mcp/asset/38d3fcda-73f4-4a52-9e23-934cebae2cb7",
+    payPaypal:     "https://www.figma.com/api/mcp/asset/0a0ca1ab-f0a2-4f91-ac6b-d820bc5434aa",
+    payStripe:     "https://www.figma.com/api/mcp/asset/7c3f44fa-8171-447d-aea3-98bab7ce063f",
+    payApplePay:   "https://www.figma.com/api/mcp/asset/0972fe2e-b324-4155-b239-106ca9c2e56c",
+    socialX:       "https://www.figma.com/api/mcp/asset/ff9c604d-2d6a-40e4-895b-e88aa02a2a91",
+    socialInsta:   "https://www.figma.com/api/mcp/asset/10d54ee3-6437-4823-947b-c74f2f921a1e",
+    socialPin:     "https://www.figma.com/api/mcp/asset/12021ff6-6dd9-47c6-9f83-4d1ac255b3dc",
+    socialFb:      "https://www.figma.com/api/mcp/asset/acf3def6-6973-4dba-a85f-d16d5653a8bb",
+};
 ---
 
-<Layout>
-	<Welcome />
+<Layout title="Centrum Pomocy">
+
+    <!-- NAV -->
+    <nav class="nav">
+        <div class="nav-inner">
+            <a href="https://wizytowki.co" class="nav-logo-link">
+                <img src={a.navLogo} alt="wizytowki.co" class="nav-logo" />
+            </a>
+            <div class="nav-links">
+                <a href="https://wizytowki.co/wizytowki">Wizytówki</a>
+                <a href="https://wizytowki.co/materialy-reklamowe">Materiały reklamowe</a>
+                <a href="https://wizytowki.co/projektowanie">Projektowanie</a>
+                <a href="https://wizytowki.co/inspiracje">Inspiracje</a>
+            </div>
+            <div class="nav-cta">
+                <a href="https://wizytowki.co/koszyk" class="nav-cart">Koszyk</a>
+                <a href="/" class="nav-btn">Pomoc</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- HERO -->
+    <section class="hero">
+        <div class="hero-inner">
+            <h1>Centrum pomocy</h1>
+            <p class="hero-sub">
+                Wszystko co musisz wiedzieć o naszych wizytówkach i innych produktach.<br />
+                Przejrzyj dostępne tematy lub skorzystaj z poniższej wyszukiwarki.
+            </p>
+            <div class="search-wrap">
+                <svg class="search-icon" width="20" height="20" viewBox="0 0 24 24" fill="none"
+                    stroke="currentColor" stroke-width="2">
+                    <circle cx="11" cy="11" r="8"></circle>
+                    <path d="m21 21-4.35-4.35"></path>
+                </svg>
+                <input type="search" placeholder="Search" class="search-input" />
+            </div>
+        </div>
+    </section>
+
+    <!-- TOPICS -->
+    <section class="topics">
+        <div class="container">
+            <h2 class="topics-title">
+                <span class="t-dark">Często poruszane tematy.</span><br />
+                <span class="t-light">Zacznij tutaj.</span>
+            </h2>
+            <div class="topics-grid">
+                {kategorie.map((k) => (
+                    <a href={`/${k.slug}/`} class="topic-card">
+                        <div class="topic-icon">
+                            <img src={a.cardIcon} alt="" width="24" height="24" />
+                        </div>
+                        <div class="topic-content">
+                            <p class="topic-name">{k.nazwa}</p>
+                            <p class="topic-desc">{k.opis}</p>
+                        </div>
+                    </a>
+                ))}
+            </div>
+        </div>
+    </section>
+
+    <!-- FAQ -->
+    <section class="faq">
+        <div class="container">
+            <div class="faq-header">
+                <h2>FAQ</h2>
+                <p>Najczęściej zadawane pytania.</p>
+            </div>
+            <div class="faq-list">
+                {faqItems.map((pytanie) => (
+                    <details class="faq-item">
+                        <summary class="faq-summary">
+                            <span>{pytanie}</span>
+                            <span class="faq-icon">
+                                <svg width="24" height="24" viewBox="0 0 24 24" fill="none"
+                                    stroke="currentColor" stroke-width="2">
+                                    <line x1="12" y1="5" x2="12" y2="19"></line>
+                                    <line x1="5" y1="12" x2="19" y2="12"></line>
+                                </svg>
+                            </span>
+                        </summary>
+                        <div class="faq-answer">
+                            <p>Skontaktuj się z nami przez formularz kontaktowy lub napisz na pomoc@wizytowki.co, a odpowiemy na Twoje pytanie.</p>
+                        </div>
+                    </details>
+                ))}
+            </div>
+            <div class="faq-banner">
+                <div class="faq-banner-top">
+                    <div class="faq-avatars">
+                        <img src={a.faqAvatar1} alt="" class="faq-av faq-av-l" />
+                        <img src={a.faqAvatar2} alt="" class="faq-av faq-av-c" />
+                        <img src={a.faqAvatar3} alt="" class="faq-av faq-av-r" />
+                    </div>
+                    <p class="faq-banner-title">Masz więcej pytań?</p>
+                    <p class="faq-banner-sub">Poszukaj tematu w wyszukiwarce lub napisz do specjalistów z naszego zespołu.</p>
+                </div>
+                <a href="https://wizytowki.co/kontakt" class="faq-cta-btn">Skontaktuj się z nami</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- PARTNERZY -->
+    <section class="partners">
+        <div class="container partners-inner">
+            <p class="partners-text">
+                <span class="partners-accent">Razem lepiej!</span>
+                {` Jesteśmy częścią grupy brandingi.pl`}
+            </p>
+            <div class="partners-logos">
+                <img src={a.partner1} alt="brandingi.pl" />
+                <img src={a.partner2} alt="uicy.pl" />
+                <img src={a.partner3} alt="wizytowki.co" />
+                <img src={a.partner4} alt="strony.io" />
+            </div>
+        </div>
+    </section>
+
+    <!-- STOPKA -->
+    <footer class="footer">
+        <div class="footer-wrap">
+            <div class="footer-content">
+                <div class="footer-left">
+                    <div class="footer-logo">
+                        <div class="footer-logo-mark">
+                            <img src={a.footerMark} alt="" />
+                        </div>
+                        <span class="footer-logo-text">wizytowki.co</span>
+                    </div>
+                    <p class="footer-hours">
+                        Godziny pracy:<br />
+                        Poniedziałek-Piątek<br />
+                        8:00-15:00 [CET]
+                    </p>
+                    <p class="footer-desc">
+                        Przeglądaj, zachwycaj się i zamawiaj wizytówki, które olśnią Twoich klientów
+                        i partnerów.
+                    </p>
+                </div>
+                <div class="footer-cols">
+                    <div class="footer-col">
+                        <h4>Kupuj i poznawaj</h4>
+                        <a href="#">Wizytówki</a>
+                        <a href="#">Materiały reklamowe</a>
+                        <a href="#">Projekty</a>
+                        <a href="#" class="footer-link-badge">Inspiracje <span class="badge">Nowość</span></a>
+                        <a href="#" class="footer-link-badge">Kupuj do firmy <span class="badge">Nowość</span></a>
+                    </div>
+                    <div class="footer-col">
+                        <h4>Pomoc</h4>
+                        <a href="#">FAQ</a>
+                        <a href="#">Polityka prywatności</a>
+                        <a href="#">Sprzedaż i zwroty</a>
+                        <a href="#">Informacje prawne</a>
+                        <a href="#">Program partnerski</a>
+                        <a href="#">Program afiliacyjny</a>
+                    </div>
+                    <div class="footer-col">
+                        <h4>O firmie</h4>
+                        <a href="#">O nas</a>
+                        <a href="#">Kariera</a>
+                        <a href="#">Blog</a>
+                        <a href="#">Kontakt</a>
+                        <a href="#">Dla mediów</a>
+                    </div>
+                </div>
+            </div>
+            <div class="subfooter">
+                <div class="payment-logos">
+                    <div class="pay-logo"><img src={a.payVisa} alt="Visa" /></div>
+                    <div class="pay-logo"><img src={a.payMastercard} alt="Mastercard" /></div>
+                    <div class="pay-logo"><img src={a.payPaypal} alt="PayPal" /></div>
+                    <div class="pay-logo"><img src={a.payStripe} alt="Stripe" /></div>
+                    <div class="pay-logo"><img src={a.payApplePay} alt="Apple Pay" /></div>
+                </div>
+                <p class="copyright">© {new Date().getFullYear()} Wizytowki.co</p>
+                <div class="socials">
+                    <a href="#" aria-label="X"><img src={a.socialX} alt="X" /></a>
+                    <a href="#" aria-label="Instagram"><img src={a.socialInsta} alt="Instagram" /></a>
+                    <a href="#" aria-label="Pinterest"><img src={a.socialPin} alt="Pinterest" /></a>
+                    <a href="#" aria-label="Facebook"><img src={a.socialFb} alt="Facebook" /></a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
 </Layout>
+
+<style>
+/* ── NAV ──────────────────────────────────────────── */
+.nav {
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    z-index: 100;
+    height: 80px;
+    display: flex;
+    align-items: center;
+    padding: 0 40px;
+}
+.nav-inner {
+    max-width: 1216px;
+    width: 100%;
+    margin: 0 auto;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+.nav-logo { height: 30px; width: 160px; object-fit: contain; object-position: left; }
+.nav-links { display: flex; align-items: center; }
+.nav-links a {
+    padding: 16px;
+    font-size: 16px;
+    font-weight: 600;
+    color: #f4f6fb;
+    white-space: nowrap;
+}
+.nav-links a:hover { color: #fff; }
+.nav-cta { display: flex; align-items: center; gap: 16px; }
+.nav-cart {
+    padding: 16px 32px;
+    font-size: 16px;
+    font-weight: 600;
+    color: #f4f6fb;
+}
+.nav-btn {
+    background: #fff;
+    color: #0c111d;
+    border: 1px solid #fff;
+    border-radius: 9999px;
+    padding: 8px 24px;
+    font-size: 16px;
+    font-weight: 600;
+}
+.nav-btn:hover { background: #f4f6fb; }
+
+/* ── HERO ─────────────────────────────────────────── */
+.hero {
+    background:
+        radial-gradient(ellipse 65% 90% at -5% 0%, rgba(0,122,255,0.20) 0%, transparent 65%),
+        #0c111d;
+    color: #fff;
+    padding: 208px 40px 80px;
+    text-align: center;
+    position: relative;
+}
+.hero-inner {
+    max-width: 640px;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+.hero h1 {
+    font-size: 56px;
+    font-weight: 600;
+    line-height: 64px;
+    margin-bottom: 24px;
+}
+.hero-sub {
+    font-size: 16px;
+    line-height: 24px;
+    color: #f4f6fb;
+    margin-bottom: 48px;
+}
+.search-wrap {
+    position: relative;
+    width: 100%;
+}
+.search-icon {
+    position: absolute;
+    left: 14px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: #667085;
+    pointer-events: none;
+}
+.search-input {
+    width: 100%;
+    padding: 12px 16px 12px 46px;
+    border-radius: 8px;
+    border: 1px solid #d0d5dd;
+    background: #fff;
+    color: #1a1a1a;
+    font-size: 16px;
+    font-family: "Inter", sans-serif;
+    outline: none;
+    box-shadow: 0 1px 2px rgba(16,24,40,0.05);
+}
+.search-input:focus { border-color: #007aff; }
+.search-input::placeholder { color: #667085; }
+
+/* ── TOPICS ───────────────────────────────────────── */
+.topics { background: #fff; padding: 80px 40px; }
+.container { max-width: 1216px; margin: 0 auto; }
+.topics-title {
+    font-size: 32px;
+    font-weight: 600;
+    line-height: 40px;
+    text-align: center;
+    margin-bottom: 24px;
+}
+.t-dark { color: #0c111d; }
+.t-light { color: #cad6ed; }
+.topics-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 24px;
+}
+.topic-card {
+    background: #f4f6fb;
+    border-radius: 16px;
+    padding: 32px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    min-height: 250px;
+    transition: box-shadow 0.2s;
+}
+.topic-card:hover { box-shadow: 0 4px 20px rgba(0,0,0,0.08); }
+.topic-icon {
+    width: 48px;
+    height: 48px;
+    background: #007aff;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+}
+.topic-icon img { width: 24px; height: 24px; }
+.topic-content { display: flex; flex-direction: column; gap: 20px; }
+.topic-name {
+    font-size: 20px;
+    font-weight: 600;
+    line-height: 32px;
+    color: #0c111d;
+}
+.topic-desc {
+    font-size: 16px;
+    line-height: 24px;
+    color: #656565;
+}
+
+/* ── FAQ ──────────────────────────────────────────── */
+.faq { background: #fff; padding: 48px 40px 80px; }
+.faq-header {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 16px;
+    text-align: center;
+    padding-bottom: 64px;
+}
+.faq-header h2 {
+    font-size: 32px;
+    font-weight: 600;
+    line-height: 40px;
+    color: #0c111d;
+}
+.faq-header p {
+    font-size: 16px;
+    line-height: 24px;
+    color: #0c111d;
+}
+.faq-list {
+    max-width: 768px;
+    margin: 0 auto;
+    padding-bottom: 80px;
+}
+.faq-item { border-bottom: 1px solid #e7ecf7; }
+.faq-summary {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    padding: 16px 0 8px;
+    cursor: pointer;
+    list-style: none;
+    gap: 16px;
+}
+.faq-summary::-webkit-details-marker { display: none; }
+.faq-summary > span:first-child {
+    font-size: 18px;
+    font-weight: 600;
+    line-height: 28px;
+    color: #0c111d;
+}
+.faq-icon { flex-shrink: 0; padding-top: 2px; color: #0c111d; }
+.faq-icon svg { transition: transform 0.2s; display: block; }
+.faq-item[open] .faq-icon svg { transform: rotate(45deg); }
+.faq-answer { padding-bottom: 16px; }
+.faq-answer p {
+    font-size: 16px;
+    line-height: 24px;
+    color: #656565;
+    max-width: 648px;
+}
+
+/* FAQ Banner */
+.faq-banner {
+    background: #f4f6fb;
+    border-radius: 16px;
+    padding: 32px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 32px;
+}
+.faq-banner-top {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+    padding-top: 8px;
+}
+.faq-avatars {
+    display: flex;
+    align-items: flex-end;
+    margin-bottom: 8px;
+}
+.faq-av {
+    border-radius: 50%;
+    border: 2px solid #f4f6fb;
+    object-fit: cover;
+    display: block;
+}
+.faq-av-l { width: 48px; height: 48px; margin-right: -16px; }
+.faq-av-c { width: 56px; height: 56px; margin-right: -16px; position: relative; z-index: 1; }
+.faq-av-r { width: 48px; height: 48px; }
+.faq-banner-title {
+    font-size: 20px;
+    font-weight: 600;
+    line-height: 32px;
+    color: #0c111d;
+    text-align: center;
+}
+.faq-banner-sub {
+    font-size: 16px;
+    line-height: 24px;
+    color: #0c111d;
+    text-align: center;
+    white-space: nowrap;
+}
+.faq-cta-btn {
+    display: inline-block;
+    background: #fff;
+    color: #0c111d;
+    border: 1px solid #fff;
+    border-radius: 9999px;
+    padding: 16px 24px;
+    font-size: 18px;
+    font-weight: 600;
+    line-height: 28px;
+    transition: background 0.2s;
+}
+.faq-cta-btn:hover { background: #f0f0f0; }
+
+/* ── PARTNERZY ────────────────────────────────────── */
+.partners { background: #0c111d; }
+.partners-inner {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 32px;
+    padding: 96px 0;
+}
+.partners-text {
+    font-size: 16px;
+    line-height: 24px;
+    color: #fff;
+    text-align: center;
+}
+.partners-accent { color: #9cb4dd; }
+.partners-logos {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 56px;
+    flex-wrap: wrap;
+}
+.partners-logos img { height: 48px; object-fit: contain; }
+
+/* ── STOPKA ───────────────────────────────────────── */
+.footer { background: #0c111d; }
+.footer-wrap {
+    max-width: 1216px;
+    margin: 0 auto;
+    padding: 48px 40px;
+    display: flex;
+    flex-direction: column;
+    gap: 32px;
+}
+.footer-content { display: flex; gap: 64px; align-items: flex-start; }
+.footer-left {
+    flex: 0 0 320px;
+    max-width: 320px;
+    display: flex;
+    flex-direction: column;
+    gap: 32px;
+}
+.footer-logo { display: flex; align-items: center; gap: 10px; }
+.footer-logo-mark {
+    background: #fff;
+    border-radius: 6px;
+    width: 32px;
+    height: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    flex-shrink: 0;
+}
+.footer-logo-mark img { width: 18px; height: auto; }
+.footer-logo-text {
+    font-family: "Clash Display Variable", sans-serif;
+    font-size: 18px;
+    font-weight: 600;
+    line-height: 28px;
+    letter-spacing: 0.9px;
+    color: #fff;
+    white-space: nowrap;
+}
+.footer-hours { font-size: 16px; line-height: 24px; color: #e7ecf7; }
+.footer-desc { font-size: 16px; line-height: 24px; color: #f9fafb; }
+.footer-cols { flex: 1; display: flex; gap: 128px; justify-content: flex-end; }
+.footer-col { display: flex; flex-direction: column; gap: 8px; min-width: 128px; }
+.footer-col h4 {
+    font-size: 14px;
+    font-weight: 600;
+    line-height: 20px;
+    color: #436eb4;
+    padding-bottom: 8px;
+}
+.footer-col a {
+    font-size: 16px;
+    font-weight: 600;
+    line-height: 24px;
+    color: #eaecf0;
+    padding: 4px 0;
+    white-space: nowrap;
+}
+.footer-col a:hover { color: #fff; }
+.footer-link-badge { display: flex; align-items: center; gap: 8px; }
+.badge {
+    background: #0c111d;
+    border: 1px solid #fff;
+    border-radius: 9999px;
+    padding: 2px 8px;
+    font-size: 12px;
+    font-weight: 500;
+    line-height: 18px;
+    color: #fff;
+}
+
+/* Subfooter */
+.subfooter {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding-top: 32px;
+    border-top: 1px solid rgba(255,255,255,0.08);
+}
+.payment-logos { display: flex; align-items: center; gap: 24px; }
+.pay-logo {
+    background: #fff;
+    border: 1px solid #eaecf0;
+    border-radius: 4px;
+    width: 34px;
+    height: 24px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 2px;
+    overflow: hidden;
+}
+.pay-logo img { max-width: 100%; max-height: 100%; object-fit: contain; }
+.copyright { font-size: 14px; line-height: 24px; color: #fff; text-align: center; }
+.socials { display: flex; align-items: center; gap: 24px; }
+.socials a { display: flex; align-items: center; justify-content: center; width: 24px; height: 24px; }
+.socials img { width: 24px; height: 24px; object-fit: contain; }
+
+/* ── RESPONSIVE ───────────────────────────────────── */
+@media (max-width: 1100px) {
+    .topics-grid { grid-template-columns: repeat(2, 1fr); }
+    .footer-cols { gap: 48px; }
+}
+@media (max-width: 960px) {
+    .nav-links { display: none; }
+    .hero { padding-top: 140px; }
+    .hero h1 { font-size: 40px; line-height: 50px; }
+    .footer-content { flex-direction: column; }
+    .footer-left { max-width: 100%; flex: unset; }
+}
+@media (max-width: 640px) {
+    .nav { padding: 0 24px; }
+    .hero { padding: 120px 24px 60px; }
+    .hero h1 { font-size: 32px; line-height: 42px; }
+    .topics { padding: 60px 24px; }
+    .topics-grid { grid-template-columns: 1fr; }
+    .faq { padding: 48px 24px 60px; }
+    .faq-banner-sub { white-space: normal; }
+    .partners { padding: 0 24px; }
+    .footer-wrap { padding: 48px 24px; }
+    .footer-cols { flex-wrap: wrap; gap: 32px; }
+    .subfooter { flex-direction: column; gap: 24px; text-align: center; }
+}
+</style>
