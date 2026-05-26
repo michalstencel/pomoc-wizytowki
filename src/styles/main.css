@@ -26,10 +26,35 @@ a {
     color: #9cb4dd;
 }
 
+/* NAV BASE */
+.nav {
+    height: 80px;
+    display: flex;
+    align-items: center;
+    padding: 0 40px;
+    z-index: 10;
+}
+
+.nav-dark {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    background: transparent;
+}
+
+.nav-dark .nav-link {
+    color: #f4f6fb;
+}
+
+.nav-dark .nav-link:hover {
+    color: #9cb4dd;
+}
+
 /* NAV LIGHT */
 .nav-light {
-    background: #fff;
     position: relative;
+    background: #fff;
 }
 
 .nav-light .nav-link {
@@ -406,46 +431,6 @@ a {
     opacity: 1;
 }
 
-/* NAV BASE */
-.nav {
-    height: 80px;
-    display: flex;
-    align-items: center;
-    padding: 0 40px;
-    z-index: 10;
-}
-
-.nav-dark {
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    background: transparent;
-}
-
-.nav-dark .nav-link {
-    color: #f4f6fb;
-}
-
-.nav-dark .nav-link:hover {
-    color: #9cb4dd;
-}
-
-/* NAV LIGHT */
-.nav-light {
-    position: relative;
-    background: #fff;
-    border-bottom: none;
-}
-
-.nav-light .nav-link {
-    color: #0c111d;
-}
-
-.nav-light .nav-link:hover {
-    color: #436eb4;
-}
-
 /* CATEGORY PAGE */
 .category-main {
     padding: 48px 40px 80px;
@@ -512,26 +497,14 @@ a {
 
 /* ARTICLE PAGE */
 .article-main {
-    padding: 48px 80px 80px;
+    padding: 48px 40px 80px;
     background: #fff;
     min-height: 60vh;
 }
 
 .article-container {
-    max-width: 720px;
+    max-width: 1216px;
     margin: 0 auto;
-}
-
-.article-cols {
-    display: grid;
-    grid-template-columns: 1fr 240px;
-    gap: 80px;
-    align-items: start;
-}
-
-.article-sidebar {
-    position: sticky;
-    top: 24px;
 }
 
 .article-header {
@@ -575,10 +548,19 @@ a {
     font-size: 16px;
     color: #0c111d;
     line-height: 1.7;
+    max-width: 720px;
 }
 
 .article-body p {
     margin-bottom: 20px;
+}
+
+/* ARTICLE RELATED */
+.article-related {
+    border-top: 1px solid #e7ecf7;
+    margin-top: 48px;
+    padding-top: 32px;
+    max-width: 720px;
 }
 
 .related-title {
@@ -608,35 +590,4 @@ a {
 /* CTA SECTION */
 .cta-section {
     background: #fff;
-}
-
-/* ARTICLE RELATED */
-.article-related {
-    border-top: 1px solid #e7ecf7;
-    margin-top: 48px;
-    padding-top: 32px;
-}
-
-.related-title {
-    font-size: 16px;
-    font-weight: 700;
-    color: #0c111d;
-    margin: 0 0 16px;
-}
-
-.related-links {
-    list-style: none;
-    display: flex;
-    flex-direction: column;
-    gap: 8px;
-}
-
-.related-link {
-    color: #007aff;
-    font-size: 15px;
-}
-
-.related-link:hover {
-    text-decoration: underline;
-    color: #325697;
 }
