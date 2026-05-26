@@ -1,8 +1,8 @@
 ---
-layout: ../../layouts/ArticleLayout.astro
 title: Kim jesteśmy
 category: O nas
 categorySlug: o-nas
+subcategory: O firmie
 relatedArticles:
   - title: Misja i wartości
     slug: misja-i-wartosci
