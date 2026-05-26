@@ -283,27 +283,31 @@ textarea {
     box-shadow: 0 0 0 4px rgba(0, 122, 255, 0.12) !important;
 }
 
-/* Lupka po lewej — pozycja STAŁA względem inputu, nigdy nie wędruje */
+/* Lupka po lewej — wycentrowana pionowo względem inputu */
 .pagefind-ui__form::before {
     width: 20px !important;
     height: 20px !important;
-    top: 18px !important;
+    top: 50% !important;
     left: 18px !important;
+    bottom: auto !important;
     margin: 0 !important;
+    transform: translateY(-50%) !important;
     background-size: 20px 20px !important;
     pointer-events: none;
 }
 
-/* "Wyczyść" — przyklejony do prawej krawędzi inputu, pionowo wycentrowany */
+/* "Wyczyść" — wycentrowany pionowo, przy prawej krawędzi inputu */
 .pagefind-ui__search-clear {
     position: absolute !important;
-    right: 12px !important;
-    top: 14px !important;
+    right: 16px !important;
+    top: 50% !important;
     bottom: auto !important;
-    padding: 6px 12px !important;
+    margin: 0 !important;
+    transform: translateY(-50%) !important;
+    padding: 0 !important;
     font-weight: 500 !important;
     font-size: 0.9375rem !important;
-    line-height: 1.5rem !important;
+    line-height: 1 !important;
     background: transparent !important;
     color: var(--color-text-muted) !important;
     border: none !important;
