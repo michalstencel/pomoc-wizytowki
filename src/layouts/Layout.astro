@@ -1,23 +1,57 @@
 ---
-import "../styles/global.css";
-const { title, variant = "dark" } = Astro.props;
+import Layout from "./Layout.astro";
+import Nav from "../components/Nav.astro";
+import CtaBanner from "../components/CtaBanner.astro";
+import Brands from "../components/Brands.astro";
+import Footer from "../components/Footer.astro";
+const { frontmatter } = Astro.props;
 ---
 
-<!doctype html>
-<html lang="pl">
-    <head>
-        <meta charset="UTF-8" />
-        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <title>{title} – Centrum Pomocy wizytowki.co</title>
-        <link rel="icon" type="image/png" href="/favicon.png" />
-        <link rel="preconnect" href="https://fonts.googleapis.com" />
-        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-        <link
-            href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap"
-            rel="stylesheet"
-        />
-    </head>
-    <body class="font-inter antialiased text-[#0c111d] bg-white">
-        <slot />
-    </body>
-</html>
+<Layout title={frontmatter.title}>
+    <Nav variant="light" />
+    <main class="article-main">
+        <div class="article-container">
+            <div class="article-header">
+                <h1 class="article-title">{frontmatter.title}</h1>
+                <nav class="breadcrumb">
+                    <a href="/" class="breadcrumb-link">Strona główna</a>
+                    <span class="breadcrumb-sep">›</span>
+                    <a href="/" class="breadcrumb-link">Centrum pomocy</a>
+                    <span class="breadcrumb-sep">›</span>
+                    <a
+                        href={`/${frontmatter.categorySlug}/`}
+                        class="breadcrumb-link">{frontmatter.category}</a
+                    >
+                    <span class="breadcrumb-sep">›</span>
+                    <span class="breadcrumb-current">{frontmatter.title}</span>
+                </nav>
+            </div>
+            <div class="article-body">
+                <slot />
+            </div>
+            {
+                frontmatter.relatedArticles &&
+                    frontmatter.relatedArticles.length > 0 && (
+                        <div class="article-related">
+                            <h2 class="related-title">Podobne tematy</h2>
+                            <ul class="related-links">
+                                {frontmatter.relatedArticles.map((art: any) => (
+                                    <li>
+                                        <a
+                                            href={`/${frontmatter.categorySlug}/${art.slug}/`}
+                                            class="related-link"
+                                        >
+                                            {art.title}
+                                        </a>
+                                    </li>
+                                ))}
+                            </ul>
+                        </div>
+                    )
+            }
+        </div>
+    </main>
+    <CtaBanner />
+    <Brands />
+    <Footer />
+</Layout>
