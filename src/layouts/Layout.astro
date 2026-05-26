@@ -43,20 +43,22 @@ const {
     <body>
         <slot />
 
-        <script>
+        <script is:inline>
             // Auto-update strefy czasowej dla Polski (CET ↔ CEST).
-            const tzName = new Intl.DateTimeFormat("en-US", {
-                timeZone: "Europe/Warsaw",
-                timeZoneName: "short",
-            })
-                .formatToParts(new Date())
-                .find((p) => p.type === "timeZoneName")?.value ?? "";
-            const tz = tzName.includes("+2") ? "CEST" : "CET";
-            document
-                .querySelectorAll<HTMLElement>("[data-tz]")
-                .forEach((el) => {
+            (function () {
+                var parts = new Intl.DateTimeFormat("en-US", {
+                    timeZone: "Europe/Warsaw",
+                    timeZoneName: "short",
+                }).formatToParts(new Date());
+                var tzPart = parts.find(function (p) {
+                    return p.type === "timeZoneName";
+                });
+                var tzName = tzPart ? tzPart.value : "";
+                var tz = tzName.indexOf("+2") !== -1 ? "CEST" : "CET";
+                document.querySelectorAll("[data-tz]").forEach(function (el) {
                     el.textContent = tz;
                 });
+            })();
         </script>
     </body>
 </html>

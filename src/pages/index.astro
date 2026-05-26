@@ -83,10 +83,16 @@ const categories = (await getCollection("categories")).sort((a, b) => {
     <Footer />
 </Layout>
 
-<!-- Pagefind UI: indeks generowany po `astro build` przez `pagefind --site dist`. -->
-<script>
-    // @ts-expect-error - PagefindUI ładowany jako moduł z /pagefind/
-    import("/pagefind/pagefind-ui.js").then(({ PagefindUI }) => {
+<!--
+    Pagefind UI: indeks i UI generowane przez astro-pagefind w trakcie `astro build`.
+    Pliki są dostępne pod /pagefind/* w czasie runtime.
+    Używamy is:inline, żeby Vite/Rollup NIE próbowało rozwiązać tych ścieżek w czasie buildu
+    (plik /pagefind/pagefind-ui.js powstaje dopiero PO astro build).
+-->
+<script is:inline src="/pagefind/pagefind-ui.js" defer></script>
+<script is:inline>
+    window.addEventListener("DOMContentLoaded", () => {
+        if (typeof PagefindUI === "undefined") return;
         new PagefindUI({
             element: "#search",
             showImages: false,
