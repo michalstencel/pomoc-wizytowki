@@ -28,29 +28,33 @@ const { frontmatter } = Astro.props;
                     <span class="breadcrumb-current">{frontmatter.title}</span>
                 </nav>
             </div>
-            <div class="article-body">
-                <slot />
+            <div class="article-cols">
+                <div class="article-body">
+                    <slot />
+                </div>
+                {
+                    frontmatter.relatedArticles &&
+                        frontmatter.relatedArticles.length > 0 && (
+                            <aside class="article-sidebar">
+                                <h2 class="related-title">Podobne tematy</h2>
+                                <ul class="related-links">
+                                    {frontmatter.relatedArticles.map(
+                                        (art: any) => (
+                                            <li>
+                                                <a
+                                                    href={`/${frontmatter.categorySlug}/${art.slug}/`}
+                                                    class="related-link"
+                                                >
+                                                    {art.title}
+                                                </a>
+                                            </li>
+                                        ),
+                                    )}
+                                </ul>
+                            </aside>
+                        )
+                }
             </div>
-            {
-                frontmatter.relatedArticles &&
-                    frontmatter.relatedArticles.length > 0 && (
-                        <div class="article-related">
-                            <h2 class="related-title">Podobne tematy</h2>
-                            <ul class="related-links">
-                                {frontmatter.relatedArticles.map((art: any) => (
-                                    <li>
-                                        <a
-                                            href={`/${frontmatter.categorySlug}/${art.slug}/`}
-                                            class="related-link"
-                                        >
-                                            {art.title}
-                                        </a>
-                                    </li>
-                                ))}
-                            </ul>
-                        </div>
-                    )
-            }
         </div>
     </main>
     <CtaBanner />

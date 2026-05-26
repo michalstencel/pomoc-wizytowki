@@ -435,6 +435,7 @@ a {
 .nav-light {
     position: relative;
     background: #fff;
+    border-bottom: none;
 }
 
 .nav-light .nav-link {
@@ -517,8 +518,20 @@ a {
 }
 
 .article-container {
-    max-width: 720px;
+    max-width: 1024px;
     margin: 0 auto;
+}
+
+.article-cols {
+    display: grid;
+    grid-template-columns: 1fr 240px;
+    gap: 80px;
+    align-items: start;
+}
+
+.article-sidebar {
+    position: sticky;
+    top: 24px;
 }
 
 .article-header {
@@ -598,11 +611,7 @@ a {
 }
 
 /* ARTICLE RELATED */
-.article-related {
-    border-top: 1px solid #e7ecf7;
-    margin-top: 48px;
-    padding-top: 32px;
-}
+.article-related {}
 
 .related-title {
     font-size: 16px;
