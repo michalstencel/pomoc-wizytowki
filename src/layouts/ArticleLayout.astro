@@ -1,59 +1,67 @@
 ---
+import type { CollectionEntry } from "astro:content";
 import Layout from "./Layout.astro";
 import Nav from "../components/Nav.astro";
 import CtaBanner from "../components/CtaBanner.astro";
 import Brands from "../components/Brands.astro";
 import Footer from "../components/Footer.astro";
-const { frontmatter } = Astro.props;
+
+interface Props {
+    article: CollectionEntry<"articles">;
+    category: CollectionEntry<"categories"> | undefined;
+}
+
+const { article, category } = Astro.props;
+const { title, relatedArticles } = article.data;
+const [categorySlug] = article.id.split("/");
+const categoryName = category?.data.name ?? categorySlug;
 ---
 
-<Layout title={frontmatter.title}>
+<Layout title={`${title} — Centrum pomocy`}>
     <Nav variant="light" />
     <main class="article-main">
         <div class="article-container">
-            <div>
+            <div class="article-content">
                 <div class="article-header">
-                    <h1 class="article-title">{frontmatter.title}</h1>
-                    <nav class="breadcrumb">
+                    <nav class="breadcrumb" aria-label="Ścieżka okruszków">
                         <a href="https://wizytowki.co" class="breadcrumb-link"
                             >Strona główna</a
                         >
-                        <span class="breadcrumb-sep">›</span>
+                        <span class="breadcrumb-sep" aria-hidden="true">›</span>
                         <a href="/" class="breadcrumb-link">Centrum pomocy</a>
-                        <span class="breadcrumb-sep">›</span>
+                        <span class="breadcrumb-sep" aria-hidden="true">›</span>
                         <a
-                            href={`/${frontmatter.categorySlug}/`}
-                            class="breadcrumb-link">{frontmatter.category}</a
+                            href={`/${categorySlug}/`}
+                            class="breadcrumb-link">{categoryName}</a
                         >
-                        <span class="breadcrumb-sep">›</span>
-                        <span class="breadcrumb-current"
-                            >{frontmatter.title}</span
-                        >
+                        <span class="breadcrumb-sep" aria-hidden="true">›</span>
+                        <span class="breadcrumb-current">{title}</span>
                     </nav>
+                    <h1 class="article-title">{title}</h1>
                 </div>
-                <div class="article-body">
+                <article class="article-body">
                     <slot />
-                </div>
+                </article>
             </div>
+
             {
-                frontmatter.relatedArticles &&
-                    frontmatter.relatedArticles.length > 0 && (
-                        <aside class="article-related">
-                            <h2 class="related-title">Podobne tematy</h2>
-                            <ul class="related-links">
-                                {frontmatter.relatedArticles.map((art: any) => (
-                                    <li>
-                                        <a
-                                            href={`/${frontmatter.categorySlug}/${art.slug}/`}
-                                            class="related-link"
-                                        >
-                                            {art.title}
-                                        </a>
-                                    </li>
-                                ))}
-                            </ul>
-                        </aside>
-                    )
+                relatedArticles && relatedArticles.length > 0 && (
+                    <aside class="article-related" aria-label="Podobne tematy">
+                        <h2 class="related-title">Podobne tematy</h2>
+                        <ul class="related-links">
+                            {relatedArticles.map((rel) => (
+                                <li>
+                                    <a
+                                        href={`/${categorySlug}/${rel.slug}/`}
+                                        class="related-link"
+                                    >
+                                        {rel.title}
+                                    </a>
+                                </li>
+                            ))}
+                        </ul>
+                    </aside>
+                )
             }
         </div>
     </main>

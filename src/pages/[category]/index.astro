@@ -7,51 +7,84 @@ import Brands from "../../components/Brands.astro";
 import Footer from "../../components/Footer.astro";
 
 export async function getStaticPaths() {
-    const articles = await getCollection("articles");
-    const categories = [...new Set(articles.map((a) => a.data.categorySlug))];
-    return categories.map((categorySlug) => ({ params: { category: categorySlug } }));
+    const categories = await getCollection("categories");
+    return categories.map((category) => ({
+        params: { category: category.id },
+        props: { category },
+    }));
 }
 
-const { category } = Astro.params;
-const allArticles = await getCollection("articles");
-const categoryArticles = allArticles.filter((a) => a.data.categorySlug === category);
-const categoryName = categoryArticles[0].data.category;
+const { category } = Astro.props;
 
-const grouped = categoryArticles.reduce((acc, article) => {
-    const sub = article.data.subcategory;
-    if (!acc[sub]) acc[sub] = [];
-    acc[sub].push(article);
-    return acc;
-}, {} as Record<string, typeof categoryArticles>);
+// Wszystkie artykuły tej kategorii (folder = kategoria).
+// W glob loader id ma format "kategoria/slug" (bez rozszerzenia .md).
+const articles = (await getCollection("articles"))
+    .filter((a) => a.id.split("/")[0] === category.id)
+    .sort((a, b) => {
+        if (a.data.order !== b.data.order) return a.data.order - b.data.order;
+        return a.data.title.localeCompare(b.data.title, "pl");
+    });
+
+// Grupowanie po podkategorii (z frontmattera artykułu).
+const grouped = articles.reduce(
+    (acc, article) => {
+        const sub = article.data.subcategory;
+        if (!acc[sub]) acc[sub] = [];
+        acc[sub].push(article);
+        return acc;
+    },
+    {} as Record<string, typeof articles>,
+);
+
+const subcategoryEntries = Object.entries(grouped);
 ---
 
-<Layout title={categoryName}>
+<Layout title={`${category.data.name} — Centrum pomocy`}>
     <Nav variant="light" />
     <main class="category-main">
         <div class="category-container">
             <div class="category-header">
-                <h1 class="category-title">{categoryName}</h1>
-                <a href="/" class="category-back">← wróć do Centrum Pomocy</a>
+                <a href="/" class="category-back">← wróć do Centrum pomocy</a>
+                <h1 class="category-title">{category.data.name}</h1>
+                <p class="category-description">{category.data.description}</p>
             </div>
-            <div class="category-grid">
-                {Object.entries(grouped).map(([subcategory, articles]) => (
-                    <div class="category-group">
-                        <h2 class="category-group-title">{subcategory}</h2>
-                        <ul class="category-links">
-                            {articles.map((article) => (
-                                <li>
 
-                                        href={`/${category}/${article.slug}/`}
-                                        class="category-link"
-                                    >
-                                        {article.data.title}
-                                    </a>
-                                </li>
-                            ))}
-                        </ul>
+            {
+                subcategoryEntries.length === 0 ? (
+                    <p class="category-empty">
+                        W tej kategorii nie ma jeszcze artykułów. Zajrzyj
+                        wkrótce.
+                    </p>
+                ) : (
+                    <div class="category-grid">
+                        {subcategoryEntries.map(([subcategory, items]) => (
+                            <div class="category-group">
+                                <h2 class="category-group-title">
+                                    {subcategory}
+                                </h2>
+                                <ul class="category-links">
+                                    {items.map((article) => {
+                                        const slug = article.id
+                                            .split("/")
+                                            .slice(1)
+                                            .join("/");
+                                        return (
+                                            <li>
+                                                <a
+                                                    href={`/${category.id}/${slug}/`}
+                                                    class="category-link"
+                                                >
+                                                    {article.data.title}
+                                                </a>
+                                            </li>
+                                        );
+                                    })}
+                                </ul>
+                            </div>
+                        ))}
                     </div>
-                ))}
-            </div>
+                )
+            }
         </div>
     </main>
     <CtaBanner />

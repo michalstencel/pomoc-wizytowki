@@ -1,37 +1,24 @@
 ---
+interface Props {
+    variant?: "dark" | "light";
+}
+
 const { variant = "dark" } = Astro.props;
-const isDark = variant === "dark";
+const logoSrc =
+    variant === "dark" ? "/logo-wizytowki.svg" : "/logo-wizytowki-black.svg";
 ---
 
-<nav class={isDark ? "nav nav-dark" : "nav nav-light"}>
+<nav class={`nav nav-${variant}`} aria-label="Główna nawigacja">
     <div class="nav-inner">
-        <a href="https://wizytowki.co">
-            {
-                isDark ? (
-                    <img
-                        src="/logo-wizytowki.svg"
-                        alt="wizytowki.co"
-                        class="h-8"
-                    />
-                ) : (
-                    <img
-                        src="/logo-wizytowki-black.svg"
-                        alt="wizytowki.co"
-                        class="h-8"
-                    />
-                )
-            }
+        <a href="https://wizytowki.co" class="nav-logo" aria-label="wizytowki.co — strona główna">
+            <img src={logoSrc} alt="wizytowki.co" class="nav-logo-img" />
         </a>
-        <div class="flex">
-            <a href="https://wizytowki.co/wizytowki" class="nav-link"
-                >Wizytówki</a
-            >
+        <div class="nav-links">
+            <a href="https://wizytowki.co/wizytowki" class="nav-link">Wizytówki</a>
             <a href="https://wizytowki.co/projekt" class="nav-link">Projekt</a>
-            <a href="https://wizytowki.co/inspiracje" class="nav-link"
-                >Inspiracje</a
-            >
+            <a href="https://wizytowki.co/inspiracje" class="nav-link">Inspiracje</a>
             <a href="https://wizytowki.co/kontakt" class="nav-link">Kontakt</a>
         </div>
-        <a href="/" class="nav-link">Pomoc</a>
+        <a href="/" class="nav-link nav-link-help">Pomoc</a>
     </div>
 </nav>

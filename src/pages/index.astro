@@ -1,69 +1,32 @@
 ---
+import { getCollection } from "astro:content";
 import Layout from "../layouts/Layout.astro";
 import Nav from "../components/Nav.astro";
 import CtaBanner from "../components/CtaBanner.astro";
 import Brands from "../components/Brands.astro";
 import Footer from "../components/Footer.astro";
 
-const kategorie = [
-    {
-        nazwa: "O nas",
-        opis: "Wszystkie mniej lub bardziej interesujące sprawy.",
-        slug: "o-nas",
-    },
-    {
-        nazwa: "Nasze produkty",
-        opis: "Materiały, techniki wykonania i ciekawostki.",
-        slug: "produkty",
-    },
-    {
-        nazwa: "Jak zamówić",
-        opis: "Przewodnik krok po kroku jak złożyć zamówienie.",
-        slug: "zamawianie",
-    },
-    {
-        nazwa: "Przygotowanie",
-        opis: "Wskazówki dotyczące przygotowania projektów.",
-        slug: "przygotowanie",
-    },
-    {
-        nazwa: "Czas realizacji",
-        opis: "Terminy oraz dostępne metody dostawy.",
-        slug: "dostawa",
-    },
-    {
-        nazwa: "Reklamacje i zwroty",
-        opis: "Mamy nadzieję, że ten dział to tylko zbędna formalność.",
-        slug: "reklamacje",
-    },
-    {
-        nazwa: "Dla firm",
-        opis: "Program partnerski i wsparcie B2B.",
-        slug: "dla-firm",
-    },
-    {
-        nazwa: "Kontakt i wsparcie",
-        opis: "Godziny pracy i formularz kontaktowy.",
-        slug: "wsparcie",
-    },
-];
+// Kategorie są ładowane automatycznie ze src/content/categories/*.json
+// Sortowane po polu `order`, potem alfabetycznie po nazwie.
+const categories = (await getCollection("categories")).sort((a, b) => {
+    if (a.data.order !== b.data.order) return a.data.order - b.data.order;
+    return a.data.name.localeCompare(b.data.name, "pl");
+});
 ---
 
-<Layout title="Centrum Pomocy">
+<Layout title="Centrum pomocy — wizytowki.co">
     <Nav variant="dark" />
 
     <!-- HERO -->
     <section class="hero">
         <div class="hero-inner">
-            <h1 class="text-white text-5xl font-semibold leading-tight">
-                Centrum pomocy
-            </h1>
-            <p class="text-slate-300 text-base leading-6">
+            <h1 class="hero-title">Centrum pomocy</h1>
+            <p class="hero-sub">
                 Wszystko co musisz wiedzieć o naszych wizytówkach i innych
                 produktach.<br />
                 Przejrzyj dostępne tematy lub skorzystaj z poniższej wyszukiwarki.
             </p>
-            <div class="search-wrap">
+            <form class="search-wrap" role="search" action="/" method="get">
                 <svg
                     class="search-icon"
                     width="20"
@@ -72,32 +35,40 @@ const kategorie = [
                     fill="none"
                     stroke="currentColor"
                     stroke-width="2"
+                    aria-hidden="true"
                 >
                     <circle cx="11" cy="11" r="8"></circle>
                     <path d="m21 21-4.35-4.35"></path>
                 </svg>
                 <input
                     type="search"
-                    placeholder="Search"
+                    name="q"
+                    placeholder="Czego szukasz?"
+                    aria-label="Szukaj w Centrum pomocy"
                     class="search-input"
                 />
-            </div>
+            </form>
         </div>
     </section>
 
     <!-- TOPICS -->
-    <section class="bg-white px-20 py-20">
-        <div class="max-w-7xl mx-auto">
-            <div class="section-heading">
-                <span class="text-slate-900">Często poruszane tematy.</span><br
-                />
-                <span class="text-slate-300">Zacznij tutaj.</span>
-            </div>
+    <section class="topics-section">
+        <div class="topics-container">
+            <h2 class="section-heading">
+                <span class="section-heading-strong"
+                    >Często poruszane tematy.</span
+                ><br />
+                <span class="section-heading-soft">Zacznij tutaj.</span>
+            </h2>
             <div class="topic-grid">
                 {
-                    kategorie.map((k) => (
-                        <a href={`/${k.slug}/`} class="topic-card">
-                            <div class="topic-card-icon">
+                    categories.map((category) => (
+                        <a
+                            href={`/${category.id}/`}
+                            class="topic-card"
+                            aria-label={`Kategoria: ${category.data.name}`}
+                        >
+                            <div class="topic-card-icon" aria-hidden="true">
                                 <svg
                                     width="24"
                                     height="24"
@@ -105,13 +76,19 @@ const kategorie = [
                                     fill="none"
                                     stroke="currentColor"
                                     stroke-width="2"
+                                    stroke-linecap="round"
+                                    stroke-linejoin="round"
                                 >
                                     <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z" />
                                 </svg>
                             </div>
-                            <div>
-                                <h3 class="topic-card-title">{k.nazwa}</h3>
-                                <p class="topic-card-desc">{k.opis}</p>
+                            <div class="topic-card-body">
+                                <h3 class="topic-card-title">
+                                    {category.data.name}
+                                </h3>
+                                <p class="topic-card-desc">
+                                    {category.data.description}
+                                </p>
                             </div>
                         </a>
                     ))
