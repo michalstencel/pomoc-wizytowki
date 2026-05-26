@@ -26,28 +26,9 @@ const categories = (await getCollection("categories")).sort((a, b) => {
                 produktach.<br />
                 Przejrzyj dostępne tematy lub skorzystaj z poniższej wyszukiwarki.
             </p>
-            <form class="search-wrap" role="search" action="/" method="get">
-                <svg
-                    class="search-icon"
-                    width="20"
-                    height="20"
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    stroke="currentColor"
-                    stroke-width="2"
-                    aria-hidden="true"
-                >
-                    <circle cx="11" cy="11" r="8"></circle>
-                    <path d="m21 21-4.35-4.35"></path>
-                </svg>
-                <input
-                    type="search"
-                    name="q"
-                    placeholder="Czego szukasz?"
-                    aria-label="Szukaj w Centrum pomocy"
-                    class="search-input"
-                />
-            </form>
+            <div class="search-wrap">
+                <div id="search"></div>
+            </div>
         </div>
     </section>
 
@@ -101,3 +82,31 @@ const categories = (await getCollection("categories")).sort((a, b) => {
     <Brands />
     <Footer />
 </Layout>
+
+<!-- Pagefind UI: indeks generowany po `astro build` przez `pagefind --site dist`. -->
+<script>
+    // @ts-expect-error - PagefindUI ładowany jako moduł z /pagefind/
+    import("/pagefind/pagefind-ui.js").then(({ PagefindUI }) => {
+        new PagefindUI({
+            element: "#search",
+            showImages: false,
+            showSubResults: true,
+            resetStyles: false,
+            translations: {
+                placeholder: "Czego szukasz?",
+                clear_search: "Wyczyść",
+                load_more: "Pokaż więcej wyników",
+                search_label: "Szukaj w Centrum pomocy",
+                filters_label: "Filtry",
+                zero_results: "Brak wyników dla [SEARCH_TERM]",
+                many_results: "[COUNT] wyników dla [SEARCH_TERM]",
+                one_result: "[COUNT] wynik dla [SEARCH_TERM]",
+                alt_search:
+                    "Brak wyników dla [SEARCH_TERM]. Pokazuję wyniki dla [DIFFERENT_TERM]",
+                search_suggestion:
+                    "Brak wyników dla [SEARCH_TERM]. Spróbuj jednego z poniższych haseł:",
+                searching: "Szukam [SEARCH_TERM]…",
+            },
+        });
+    });
+</script>

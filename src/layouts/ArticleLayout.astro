@@ -21,9 +21,9 @@ const categoryName = category?.data.name ?? categorySlug;
     <Nav variant="light" />
     <main class="article-main">
         <div class="article-container">
-            <div class="article-content">
+            <div class="article-content" data-pagefind-body>
                 <div class="article-header">
-                    <nav class="breadcrumb" aria-label="Ścieżka okruszków">
+                    <nav class="breadcrumb" aria-label="Ścieżka okruszków" data-pagefind-ignore>
                         <a href="https://wizytowki.co" class="breadcrumb-link"
                             >Strona główna</a
                         >
@@ -37,7 +37,10 @@ const categoryName = category?.data.name ?? categorySlug;
                         <span class="breadcrumb-sep" aria-hidden="true">›</span>
                         <span class="breadcrumb-current">{title}</span>
                     </nav>
-                    <h1 class="article-title">{title}</h1>
+                    <h1 class="article-title" data-pagefind-meta="title">
+                        {title}
+                    </h1>
+                    <meta data-pagefind-meta={`category:${categoryName}`} />
                 </div>
                 <article class="article-body">
                     <slot />

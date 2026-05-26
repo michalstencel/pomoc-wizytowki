@@ -25,7 +25,6 @@ const {
         <title>{title}</title>
 
         <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-        <link rel="alternate icon" href="/favicon.ico" />
 
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link
@@ -34,11 +33,30 @@ const {
             crossorigin
         />
         <link
-            href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=DM+Serif+Display&display=swap"
+            href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap"
             rel="stylesheet"
         />
+
+        <!-- Pagefind UI (statyczne pliki generowane podczas `npm run build`) -->
+        <link href="/pagefind/pagefind-ui.css" rel="stylesheet" />
     </head>
     <body>
         <slot />
+
+        <script>
+            // Auto-update strefy czasowej dla Polski (CET ↔ CEST).
+            const tzName = new Intl.DateTimeFormat("en-US", {
+                timeZone: "Europe/Warsaw",
+                timeZoneName: "short",
+            })
+                .formatToParts(new Date())
+                .find((p) => p.type === "timeZoneName")?.value ?? "";
+            const tz = tzName.includes("+2") ? "CEST" : "CET";
+            document
+                .querySelectorAll<HTMLElement>("[data-tz]")
+                .forEach((el) => {
+                    el.textContent = tz;
+                });
+        </script>
     </body>
 </html>

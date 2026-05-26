@@ -34,8 +34,8 @@
     --t-fast: 0.15s ease;
     --t-base: 0.2s ease;
 
-    --font-sans: "DM Sans", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
-    --font-display: "DM Serif Display", "DM Sans", Georgia, serif;
+    --font-sans: "Inter", system-ui, -apple-system, "Segoe UI", Roboto,
+        "Helvetica Neue", Arial, sans-serif;
 }
 
 /* ============================================================
@@ -60,6 +60,7 @@ body {
     line-height: 1.5;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
+    font-feature-settings: "cv11", "ss01", "ss03";
 }
 
 a {
@@ -161,7 +162,6 @@ textarea {
 .nav-light {
     position: relative;
     background: var(--color-bg);
-    border-bottom: 1px solid var(--color-border);
 }
 
 .nav-light .nav-link {
@@ -206,10 +206,10 @@ textarea {
 
 .hero-title {
     color: #fff;
-    font-size: clamp(32px, 5vw, 48px);
+    font-size: clamp(36px, 5.5vw, 52px);
     font-weight: 600;
-    line-height: 1.15;
-    letter-spacing: -0.02em;
+    line-height: 1.1;
+    letter-spacing: -0.025em;
     margin: 0;
 }
 
@@ -226,30 +226,42 @@ textarea {
     margin: 0;
 }
 
-.search-icon {
-    position: absolute;
-    left: 14px;
-    top: 50%;
-    transform: translateY(-50%);
-    color: #667085;
-    pointer-events: none;
-}
-
-.search-input {
+/* ============================================================
+   PAGEFIND UI (custom theme)
+   ============================================================ */
+#search {
+    --pagefind-ui-scale: 0.9;
+    --pagefind-ui-primary: var(--color-primary);
+    --pagefind-ui-text: var(--color-text);
+    --pagefind-ui-background: #fff;
+    --pagefind-ui-border: var(--color-border-strong);
+    --pagefind-ui-tag: var(--color-bg-soft);
+    --pagefind-ui-border-width: 1px;
+    --pagefind-ui-border-radius: var(--radius-sm);
+    --pagefind-ui-image-border-radius: var(--radius-sm);
+    --pagefind-ui-image-box-ratio: 3 / 2;
+    --pagefind-ui-font: var(--font-sans);
     width: 100%;
-    padding: 12px 16px 12px 42px;
-    border-radius: var(--radius-sm);
-    border: 1px solid var(--color-border-strong);
-    background: #fff;
-    font-size: 16px;
-    outline: none;
-    box-shadow: var(--shadow-sm);
-    transition: border-color var(--t-base), box-shadow var(--t-base);
+    text-align: left;
 }
 
-.search-input:focus {
-    border-color: var(--color-primary);
-    box-shadow: 0 0 0 4px rgba(0, 122, 255, 0.12);
+.pagefind-ui__search-input {
+    box-shadow: var(--shadow-sm);
+    transition:
+        border-color var(--t-base),
+        box-shadow var(--t-base);
+}
+
+.pagefind-ui__search-input:focus {
+    border-color: var(--color-primary) !important;
+    box-shadow: 0 0 0 4px rgba(0, 122, 255, 0.12) !important;
+}
+
+.pagefind-ui__drawer {
+    background: #fff;
+    border-radius: var(--radius-sm);
+    box-shadow: var(--shadow-md);
+    margin-top: 8px;
 }
 
 /* ============================================================
@@ -271,7 +283,7 @@ textarea {
     line-height: 1.25;
     text-align: center;
     margin: 0 0 48px;
-    letter-spacing: -0.01em;
+    letter-spacing: -0.015em;
 }
 
 .section-heading-strong {
@@ -297,14 +309,11 @@ textarea {
     justify-content: space-between;
     gap: 24px;
     min-height: 250px;
-    transition:
-        transform var(--t-base),
-        box-shadow var(--t-base);
+    transition: background var(--t-base);
 }
 
 .topic-card:hover {
-    transform: translateY(-2px);
-    box-shadow: var(--shadow-md);
+    background: #e7ecf7;
 }
 
 .topic-card-icon {
@@ -457,9 +466,7 @@ textarea {
     font-weight: 600;
     padding: 12px 24px;
     border-radius: var(--radius-pill);
-    transition:
-        background var(--t-base),
-        transform var(--t-base);
+    transition: background var(--t-base), color var(--t-base);
 }
 
 .cta-banner-btn-secondary {
@@ -469,7 +476,6 @@ textarea {
 
 .cta-banner-btn-secondary:hover {
     background: #e7ecf7;
-    transform: translateY(-1px);
 }
 
 .cta-banner-btn-primary {
@@ -479,7 +485,6 @@ textarea {
 
 .cta-banner-btn-primary:hover {
     background: var(--color-primary-hover);
-    transform: translateY(-1px);
 }
 
 /* ============================================================
@@ -670,7 +675,7 @@ textarea {
    CATEGORY PAGE
    ============================================================ */
 .category-main {
-    padding: clamp(40px, 6vw, 64px) var(--container-pad) clamp(64px, 10vw, 96px);
+    padding: clamp(48px, 7vw, 80px) var(--container-pad) clamp(64px, 10vw, 96px);
     background: var(--color-bg);
     min-height: 60vh;
 }
@@ -681,10 +686,19 @@ textarea {
 }
 
 .category-header {
-    margin-bottom: 56px;
+    margin-bottom: 64px;
     display: flex;
     flex-direction: column;
     gap: 12px;
+}
+
+.category-title {
+    font-size: clamp(40px, 6vw, 56px);
+    font-weight: 700;
+    color: var(--color-text);
+    margin: 0;
+    letter-spacing: -0.025em;
+    line-height: 1.05;
 }
 
 .category-back {
@@ -697,21 +711,6 @@ textarea {
 
 .category-back:hover {
     color: var(--color-primary-dark);
-}
-
-.category-title {
-    font-size: clamp(28px, 4vw, 36px);
-    font-weight: 700;
-    color: var(--color-text);
-    margin: 0;
-    letter-spacing: -0.02em;
-}
-
-.category-description {
-    font-size: 16px;
-    color: var(--color-text-muted);
-    margin: 0;
-    max-width: 640px;
 }
 
 .category-empty {
@@ -740,12 +739,11 @@ textarea {
 }
 
 .category-group-title {
-    font-size: 16px;
+    font-size: 17px;
     font-weight: 700;
     color: var(--color-text);
     margin: 0 0 16px;
-    padding-bottom: 8px;
-    border-bottom: 1px solid var(--color-border);
+    letter-spacing: -0.005em;
 }
 
 .category-links {
