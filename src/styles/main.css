@@ -9,6 +9,7 @@
     --color-text: #0c111d;
     --color-text-muted: #656565;
     --color-text-soft: #9aa5b8;
+    --color-text-desc: #333333;
 
     --color-primary: #007aff;
     --color-primary-hover: #0062cc;
@@ -60,7 +61,6 @@ body {
     line-height: 1.5;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
-    font-feature-settings: "cv11", "ss01", "ss03";
 }
 
 a {
@@ -206,17 +206,18 @@ textarea {
 
 .hero-title {
     color: #fff;
-    font-size: clamp(36px, 5.5vw, 52px);
-    font-weight: 600;
-    line-height: 1.1;
-    letter-spacing: -0.025em;
+    font-size: 3.5rem;
+    font-weight: 700;
+    line-height: 4rem;
+    letter-spacing: -0.02em;
     margin: 0;
 }
 
 .hero-sub {
-    color: #cbd5e1;
-    font-size: clamp(15px, 1.6vw, 16px);
-    line-height: 1.6;
+    color: #fff;
+    font-size: 1rem;
+    line-height: 1.5rem;
+    max-width: 40rem;
     margin: 0;
 }
 
@@ -226,11 +227,18 @@ textarea {
     margin: 0;
 }
 
+@media (max-width: 640px) {
+    .hero-title {
+        font-size: clamp(2rem, 9vw, 3.5rem);
+        line-height: 1.15;
+    }
+}
+
 /* ============================================================
    PAGEFIND UI (custom theme)
    ============================================================ */
 #search {
-    --pagefind-ui-scale: 0.9;
+    --pagefind-ui-scale: 1;
     --pagefind-ui-primary: var(--color-primary);
     --pagefind-ui-text: var(--color-text);
     --pagefind-ui-background: #fff;
@@ -245,11 +253,24 @@ textarea {
     text-align: left;
 }
 
+/* Search input: padding równy w pionie i poziomie, czysty placeholder */
 .pagefind-ui__search-input {
+    padding: 14px 56px 14px 48px !important;
+    font-size: 1rem !important;
+    line-height: 1.5rem !important;
+    background-image: none !important;
     box-shadow: var(--shadow-sm);
     transition:
         border-color var(--t-base),
         box-shadow var(--t-base);
+}
+
+.pagefind-ui__search-input::placeholder {
+    color: var(--color-text-muted);
+    font-weight: 400;
+    font-size: 1rem;
+    letter-spacing: 0;
+    opacity: 1;
 }
 
 .pagefind-ui__search-input:focus {
@@ -257,15 +278,88 @@ textarea {
     box-shadow: 0 0 0 4px rgba(0, 122, 255, 0.12) !important;
 }
 
+/* Lupa po lewej stronie (ikonka z Pagefind) — wycentrowana */
+.pagefind-ui__form::before {
+    width: 20px !important;
+    height: 20px !important;
+    top: 50% !important;
+    left: 18px !important;
+    margin-top: -10px !important;
+}
+
+/* "Wyczyść" w prawym rogu */
+.pagefind-ui__search-clear {
+    padding: 0 16px !important;
+    font-weight: 500 !important;
+}
+
+/* Drawer wyników — bez paskudnej kreski na dole */
 .pagefind-ui__drawer {
     background: #fff;
     border-radius: var(--radius-sm);
     box-shadow: var(--shadow-md);
     margin-top: 8px;
+    border: 1px solid var(--color-border);
+    padding: 8px 0;
+}
+
+.pagefind-ui__drawer:empty,
+.pagefind-ui__drawer.pagefind-ui__hidden {
+    display: none !important;
+}
+
+.pagefind-ui__results-area {
+    border: none !important;
+}
+
+.pagefind-ui__result {
+    border: none !important;
+    padding: 16px 24px !important;
+}
+
+.pagefind-ui__result + .pagefind-ui__result {
+    border-top: 1px solid var(--color-border) !important;
+}
+
+.pagefind-ui__result-title {
+    font-size: 1rem !important;
+    font-weight: 600 !important;
+    color: var(--color-text) !important;
+}
+
+.pagefind-ui__result-link {
+    color: var(--color-text) !important;
+    text-decoration: none !important;
+}
+
+.pagefind-ui__result-link:hover {
+    color: var(--color-primary) !important;
+}
+
+.pagefind-ui__result-excerpt {
+    font-size: 0.9375rem !important;
+    color: var(--color-text-muted) !important;
+    line-height: 1.5 !important;
+}
+
+.pagefind-ui__message {
+    padding: 12px 24px !important;
+    color: var(--color-text-muted) !important;
+    font-size: 0.875rem !important;
+    border: none !important;
+}
+
+.pagefind-ui__result-tag {
+    background: var(--color-bg-soft) !important;
+    color: var(--color-text) !important;
+    border-radius: var(--radius-pill) !important;
+    padding: 2px 10px !important;
+    font-size: 0.8125rem !important;
+    text-transform: none !important;
 }
 
 /* ============================================================
-   TOPICS / KATEGORIE
+   TOPICS / KATEGORIE — sekcja na stronie głównej
    ============================================================ */
 .topics-section {
     background: var(--color-bg);
@@ -278,12 +372,12 @@ textarea {
 }
 
 .section-heading {
-    font-size: clamp(24px, 3vw, 32px);
-    font-weight: 600;
-    line-height: 1.25;
+    font-size: 1.75rem;
+    font-weight: 700;
+    line-height: 2rem;
     text-align: center;
     margin: 0 0 48px;
-    letter-spacing: -0.015em;
+    letter-spacing: -0.01em;
 }
 
 .section-heading-strong {
@@ -335,17 +429,17 @@ textarea {
 }
 
 .topic-card-title {
-    font-size: 20px;
-    font-weight: 600;
+    font-size: 1.25rem;
+    font-weight: 700;
     color: var(--color-text);
     margin: 0;
     letter-spacing: -0.01em;
 }
 
 .topic-card-desc {
-    font-size: 15px;
-    color: var(--color-text-muted);
-    line-height: 1.55;
+    font-size: 1rem;
+    line-height: 1.5rem;
+    color: var(--color-text-desc);
     margin: 0;
 }
 
@@ -672,7 +766,7 @@ textarea {
 }
 
 /* ============================================================
-   CATEGORY PAGE
+   CATEGORY PAGE (np. /o-nas/)
    ============================================================ */
 .category-main {
     padding: clamp(48px, 7vw, 80px) var(--container-pad) clamp(64px, 10vw, 96px);
@@ -689,21 +783,21 @@ textarea {
     margin-bottom: 64px;
     display: flex;
     flex-direction: column;
-    gap: 12px;
+    gap: 8px;
 }
 
 .category-title {
-    font-size: clamp(40px, 6vw, 56px);
+    font-size: 2rem;
     font-weight: 700;
     color: var(--color-text);
     margin: 0;
-    letter-spacing: -0.025em;
-    line-height: 1.05;
+    letter-spacing: -0.02em;
+    line-height: 1.15;
 }
 
 .category-back {
     color: var(--color-primary);
-    font-size: 14px;
+    font-size: 1.125rem;
     font-weight: 500;
     align-self: flex-start;
     transition: color var(--t-base);
@@ -739,7 +833,7 @@ textarea {
 }
 
 .category-group-title {
-    font-size: 17px;
+    font-size: 1.25rem;
     font-weight: 700;
     color: var(--color-text);
     margin: 0 0 16px;
@@ -757,9 +851,9 @@ textarea {
 
 .category-link {
     color: var(--color-primary);
-    font-size: 15px;
+    font-size: 1.125rem;
     font-weight: 400;
-    line-height: 1.4;
+    line-height: 1.5;
     transition: color var(--t-base);
 }
 
@@ -805,7 +899,7 @@ textarea {
 }
 
 .article-title {
-    font-size: clamp(28px, 4vw, 36px);
+    font-size: 2rem;
     font-weight: 700;
     color: var(--color-text);
     margin: 0;
@@ -818,7 +912,7 @@ textarea {
     align-items: center;
     gap: 6px;
     flex-wrap: wrap;
-    font-size: 14px;
+    font-size: 1rem;
 }
 
 .breadcrumb-link {
@@ -941,7 +1035,7 @@ textarea {
 }
 
 .related-title {
-    font-size: 1.125rem;
+    font-size: 1.25rem;
     font-weight: 700;
     color: var(--color-text);
     margin: 0 0 16px;
@@ -958,7 +1052,7 @@ textarea {
 
 .related-link {
     color: var(--color-primary);
-    font-size: 15px;
+    font-size: 1.125rem;
     transition: color var(--t-base);
 }
 
