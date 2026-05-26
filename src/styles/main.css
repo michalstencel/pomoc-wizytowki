@@ -505,6 +505,10 @@ a {
 .article-container {
     max-width: 1216px;
     margin: 0 auto;
+    display: grid;
+    grid-template-columns: 1fr 280px;
+    gap: 80px;
+    align-items: start;
 }
 
 .article-header {
@@ -548,7 +552,6 @@ a {
     font-size: 16px;
     color: #0c111d;
     line-height: 1.7;
-    max-width: 720px;
 }
 
 .article-body p {
@@ -557,10 +560,10 @@ a {
 
 /* ARTICLE RELATED */
 .article-related {
-    border-top: 1px solid #e7ecf7;
-    margin-top: 48px;
-    padding-top: 32px;
-    max-width: 720px;
+    border-left: 1px solid #e7ecf7;
+    padding-left: 32px;
+    position: sticky;
+    top: 24px;
 }
 
 .related-title {

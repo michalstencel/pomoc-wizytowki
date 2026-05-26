@@ -11,50 +11,50 @@ const { frontmatter } = Astro.props;
     <Nav variant="light" />
     <main class="article-main">
         <div class="article-container">
-            <div class="article-header">
-                <h1 class="article-title">{frontmatter.title}</h1>
-                <nav class="breadcrumb">
-                    <a href="https://wizytowki.co" class="breadcrumb-link"
-                        >Strona główna</a
-                    >
-                    <span class="breadcrumb-sep">›</span>
-                    <a href="/" class="breadcrumb-link">Centrum pomocy</a>
-                    <span class="breadcrumb-sep">›</span>
-                    <a
-                        href={`/${frontmatter.categorySlug}/`}
-                        class="breadcrumb-link">{frontmatter.category}</a
-                    >
-                    <span class="breadcrumb-sep">›</span>
-                    <span class="breadcrumb-current">{frontmatter.title}</span>
-                </nav>
-            </div>
-            <div class="article-cols">
+            <div>
+                <div class="article-header">
+                    <h1 class="article-title">{frontmatter.title}</h1>
+                    <nav class="breadcrumb">
+                        <a href="https://wizytowki.co" class="breadcrumb-link"
+                            >Strona główna</a
+                        >
+                        <span class="breadcrumb-sep">›</span>
+                        <a href="/" class="breadcrumb-link">Centrum pomocy</a>
+                        <span class="breadcrumb-sep">›</span>
+                        <a
+                            href={`/${frontmatter.categorySlug}/`}
+                            class="breadcrumb-link">{frontmatter.category}</a
+                        >
+                        <span class="breadcrumb-sep">›</span>
+                        <span class="breadcrumb-current"
+                            >{frontmatter.title}</span
+                        >
+                    </nav>
+                </div>
                 <div class="article-body">
                     <slot />
                 </div>
-                {
-                    frontmatter.relatedArticles &&
-                        frontmatter.relatedArticles.length > 0 && (
-                            <aside class="article-sidebar">
-                                <h2 class="related-title">Podobne tematy</h2>
-                                <ul class="related-links">
-                                    {frontmatter.relatedArticles.map(
-                                        (art: any) => (
-                                            <li>
-                                                <a
-                                                    href={`/${frontmatter.categorySlug}/${art.slug}/`}
-                                                    class="related-link"
-                                                >
-                                                    {art.title}
-                                                </a>
-                                            </li>
-                                        ),
-                                    )}
-                                </ul>
-                            </aside>
-                        )
-                }
             </div>
+            {
+                frontmatter.relatedArticles &&
+                    frontmatter.relatedArticles.length > 0 && (
+                        <aside class="article-related">
+                            <h2 class="related-title">Podobne tematy</h2>
+                            <ul class="related-links">
+                                {frontmatter.relatedArticles.map((art: any) => (
+                                    <li>
+                                        <a
+                                            href={`/${frontmatter.categorySlug}/${art.slug}/`}
+                                            class="related-link"
+                                        >
+                                            {art.title}
+                                        </a>
+                                    </li>
+                                ))}
+                            </ul>
+                        </aside>
+                    )
+            }
         </div>
     </main>
     <CtaBanner />
