@@ -272,7 +272,7 @@ textarea {
 }
 
 .pagefind-ui__search-input::placeholder {
-    color: #9cb4dd;
+    color: rgba(0, 0, 0, 0.5);
     font-weight: 400;
     font-size: 1rem;
     letter-spacing: 0;
