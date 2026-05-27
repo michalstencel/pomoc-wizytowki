@@ -271,12 +271,15 @@ textarea {
         box-shadow var(--t-base);
 }
 
-.pagefind-ui__search-input::placeholder {
-    color: rgba(0, 0, 0, 0.5);
-    font-weight: 400;
-    font-size: 1rem;
-    letter-spacing: 0;
-    opacity: 1;
+.pagefind-ui__search-input::placeholder,
+.pagefind-ui__search-input::-webkit-input-placeholder,
+.pagefind-ui__search-input::-moz-placeholder,
+.pagefind-ui__search-input:-ms-input-placeholder {
+    color: #000000 !important;
+    font-weight: 400 !important;
+    font-size: 1rem !important;
+    letter-spacing: 0 !important;
+    opacity: 1 !important;
 }
 
 .pagefind-ui__search-input:focus {

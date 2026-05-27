@@ -16,7 +16,7 @@ export const structure = (S: StructureBuilder) =>
                                 .title("Artykuły")
                                 .schemaType("article")
                                 .filter(
-                                    '_type == "article" && category._ref == $categoryId',
+                                    '_type == "article" && $categoryId in placements[].category._ref',
                                 )
                                 .params({ categoryId })
                                 .defaultOrdering([
