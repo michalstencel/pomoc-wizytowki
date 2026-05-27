@@ -66,8 +66,12 @@ const kimJestesmyBody = [
     },
 ];
 
+const subcategories = [
+    { _id: "subcategory-o-firmie-o-nas", name: "O firmie", categoryRef: "category-o-nas" },
+];
+
 const articles = [
-    { _id: "article-kim-jestesmy", title: "Kim jesteśmy", slug: "kim-jestesmy", categoryRef: "category-o-nas", subcategory: "O firmie", body: kimJestesmyBody },
+    { _id: "article-kim-jestesmy", title: "Kim jesteśmy", slug: "kim-jestesmy", categoryRef: "category-o-nas", subcategoryRef: "subcategory-o-firmie-o-nas", body: kimJestesmyBody },
 ];
 
 async function seed() {
@@ -86,6 +90,17 @@ async function seed() {
         console.log(`  ${cat.name}`);
     }
 
+    console.log("\nPodkategorie:");
+    for (const sub of subcategories) {
+        await client.createOrReplace({
+            _id: sub._id,
+            _type: "subcategory",
+            name: sub.name,
+            category: { _type: "reference", _ref: sub.categoryRef },
+        });
+        console.log(`  ${sub.name}`);
+    }
+
     console.log("\nArtykuły:");
     for (const art of articles) {
         await client.createOrReplace({
@@ -94,7 +109,7 @@ async function seed() {
             title: art.title,
             slug: { _type: "slug", current: art.slug },
             category: { _type: "reference", _ref: art.categoryRef },
-            subcategory: art.subcategory,
+            subcategory: { _type: "reference", _ref: art.subcategoryRef },
             body: art.body,
         });
         console.log(`  ${art.title}`);

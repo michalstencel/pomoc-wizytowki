@@ -21,19 +21,7 @@ export const structure = (S: StructureBuilder) =>
                                 .params({ categoryId })
                                 .defaultOrdering([
                                     { field: "title", direction: "asc" },
-                                ])
-                                .initialValueTemplates([
-                                    S.initialValueTemplateItem({
-                                        id: "article-by-category",
-                                        parameters: { categoryId },
-                                    }),
-                                ])
-                                .canHandleIntent(
-                                    (intentName, params) =>
-                                        intentName === "create" &&
-                                        params.template ===
-                                            "article-by-category",
-                                ),
+                                ]),
                         ),
                 ),
             S.divider(),
@@ -44,6 +32,15 @@ export const structure = (S: StructureBuilder) =>
                         .title("Wszystkie artykuły")
                         .defaultOrdering([
                             { field: "title", direction: "asc" },
+                        ]),
+                ),
+            S.listItem()
+                .title("Wszystkie podkategorie")
+                .child(
+                    S.documentTypeList("subcategory")
+                        .title("Wszystkie podkategorie")
+                        .defaultOrdering([
+                            { field: "name", direction: "asc" },
                         ]),
                 ),
             S.listItem()

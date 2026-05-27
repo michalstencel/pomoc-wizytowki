@@ -55,6 +55,7 @@ export interface QuickLink {
 }
 
 export interface Article extends ArticleListItem {
+    subcategoryRef?: string;
     coverImage?: SanityImage;
     body?: PortableTextBlock[];
     quickLinksTitle?: string;
@@ -90,7 +91,7 @@ export const QUERY_ARTICLES_BY_CATEGORY = /* groq */ `
         _id,
         title,
         slug,
-        subcategory,
+        "subcategory": subcategory->name,
         "category": category->{ _id, name, slug }
     }
 `;
@@ -104,7 +105,8 @@ export const QUERY_ARTICLE_BY_SLUG = /* groq */ `
         _id,
         title,
         slug,
-        subcategory,
+        "subcategory": subcategory->name,
+        "subcategoryRef": subcategory._ref,
         coverImage,
         body[]{
             ...,
@@ -145,13 +147,13 @@ export const QUERY_RELATED_ARTICLES = /* groq */ `
         _type == "article"
         && defined(slug.current)
         && category->slug.current == $categorySlug
-        && subcategory == $subcategory
+        && subcategory._ref == $subcategoryRef
         && slug.current != $currentSlug
     ] | order(title asc) {
         _id,
         title,
         slug,
-        subcategory,
+        "subcategory": subcategory->name,
         "category": category->{ _id, name, slug }
     }
 `;

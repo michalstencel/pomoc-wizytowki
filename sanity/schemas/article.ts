@@ -32,9 +32,24 @@ export const article = defineType({
         defineField({
             name: "subcategory",
             title: "Podkategoria",
-            type: "string",
+            type: "reference",
+            to: [{ type: "subcategory" }],
             description:
-                'Sekcja wewnątrz kategorii (np. "O firmie", "Informacje prawne"). Artykuły z tą samą wartością są grupowane razem na liście i podpowiadane sobie nawzajem w sidebarze "Podobne tematy".',
+                'Wybierz podkategorię z listy. Lista jest filtrowana — pokazuje tylko podkategorie z wybranej powyżej kategorii. Jeśli potrzebujesz nowej podkategorii, utwórz ją w "Wszystkie podkategorie".',
+            options: {
+                filter: ({ document }) => {
+                    const categoryRef = (
+                        document?.category as { _ref?: string } | undefined
+                    )?._ref;
+                    if (!categoryRef) {
+                        return { filter: "false" };
+                    }
+                    return {
+                        filter: "category._ref == $categoryRef",
+                        params: { categoryRef },
+                    };
+                },
+            },
             validation: (Rule) => Rule.required(),
         }),
         defineField({
