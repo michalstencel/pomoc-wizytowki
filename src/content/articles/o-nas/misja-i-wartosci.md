@@ -13,7 +13,7 @@ Nasze kluczowe wartości:
 
 ‍
 
-1. Jakość bez kompromisów
+*01.Jakość bez kompromisów*
 ‍Każdy projekt traktujemy z najwyższą starannością, używając premium materiałów i dbając o precyzję wykonania. Wierzymy, że wizytówka to nie tylko kawałek papieru, ale przedłużenie tożsamości biznesowej naszych klientów.
 
 ‍
