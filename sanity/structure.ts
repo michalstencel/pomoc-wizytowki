@@ -44,6 +44,15 @@ export const structure = (S: StructureBuilder) =>
                         ]),
                 ),
             S.listItem()
+                .title("Wszystkie produkty")
+                .child(
+                    S.documentTypeList("product")
+                        .title("Wszystkie produkty")
+                        .defaultOrdering([
+                            { field: "name", direction: "asc" },
+                        ]),
+                ),
+            S.listItem()
                 .title("Wszystkie kategorie")
                 .child(
                     S.documentTypeList("category")

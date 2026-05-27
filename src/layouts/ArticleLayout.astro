@@ -13,7 +13,17 @@ interface Props {
 }
 
 const { article, related } = Astro.props;
-const { title, subcategory, body, coverImage, category, quickLinks, quickLinksTitle } = article;
+const {
+    title,
+    subcategory,
+    body,
+    coverImage,
+    category,
+    quickLinks,
+    quickLinksTitle,
+    relatedProducts,
+    relatedProductsTitle,
+} = article;
 const categorySlug = category.slug.current;
 const categoryName = category.name;
 
@@ -28,7 +38,14 @@ const sortedQuickLinks = (quickLinks ?? [])
 
 const quickLinksHeader =
     quickLinksTitle?.trim() ||
-    "Przejdź do konkretnej kategorii, aby dowiedzieć się więcej:";
+    "Przejdź do konkretnego artykułu, aby dowiedzieć się więcej:";
+
+const sortedRelatedProducts = (relatedProducts ?? [])
+    .filter((p) => p && p.name && p.url)
+    .sort((a, b) => a.name.localeCompare(b.name, "pl"));
+
+const relatedProductsHeader =
+    relatedProductsTitle?.trim() || "Powiązane produkty:";
 ---
 
 <Layout title={`${title} — Centrum pomocy`}>
@@ -91,6 +108,36 @@ const quickLinksHeader =
                                             class="article-quick-links-item"
                                         >
                                             {link.title}
+                                        </a>
+                                    </li>
+                                ))}
+                            </ul>
+                        </section>
+                    )
+                }
+
+                {
+                    sortedRelatedProducts.length > 0 && (
+                        <section class="article-quick-links" data-pagefind-ignore>
+                            <p class="article-quick-links-intro">
+                                {relatedProductsHeader}
+                            </p>
+                            <ul class="article-quick-links-list">
+                                {sortedRelatedProducts.map((product) => (
+                                    <li>
+                                        <a
+                                            href={product.url}
+                                            class="article-quick-links-item"
+                                            target="_blank"
+                                            rel="noopener noreferrer"
+                                        >
+                                            {product.name}
+                                            {product.description && (
+                                                <span class="article-quick-links-desc">
+                                                    {" "}
+                                                    — {product.description}
+                                                </span>
+                                            )}
                                         </a>
                                     </li>
                                 ))}

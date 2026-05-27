@@ -1175,6 +1175,11 @@ textarea {
     text-underline-offset: 3px;
 }
 
+.article-quick-links-desc {
+    color: var(--color-text-muted);
+    font-size: 0.9375rem;
+}
+
 .article-file-meta {
     font-size: 0.8125rem;
     color: var(--color-text-muted);

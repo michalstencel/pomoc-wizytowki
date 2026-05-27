@@ -54,12 +54,21 @@ export interface QuickLink {
     categorySlug: string;
 }
 
+export interface RelatedProduct {
+    _id: string;
+    name: string;
+    url: string;
+    description?: string;
+}
+
 export interface Article extends ArticleListItem {
     subcategoryRef?: string;
     coverImage?: SanityImage;
     body?: PortableTextBlock[];
     quickLinksTitle?: string;
     quickLinks?: QuickLink[];
+    relatedProductsTitle?: string;
+    relatedProducts?: RelatedProduct[];
 }
 
 export const QUERY_ALL_CATEGORIES = /* groq */ `
@@ -126,6 +135,13 @@ export const QUERY_ARTICLE_BY_SLUG = /* groq */ `
             title,
             "slug": slug.current,
             "categorySlug": category->slug.current
+        },
+        relatedProductsTitle,
+        "relatedProducts": relatedProducts[]->{
+            _id,
+            name,
+            url,
+            description
         },
         "category": category->{ _id, name, slug }
     }

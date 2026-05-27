@@ -174,6 +174,26 @@ export const article = defineType({
                 }),
             ],
         }),
+        defineField({
+            name: "relatedProductsTitle",
+            title: "Sekcja \"Powiązane produkty\" — nagłówek (opcjonalny)",
+            type: "string",
+            description:
+                'Tekst nad listą produktów. Jeśli pusty, użyjemy domyślnego: "Powiązane produkty:".',
+        }),
+        defineField({
+            name: "relatedProducts",
+            title: "Sekcja \"Powiązane produkty\" — lista produktów",
+            description:
+                "Lista produktów wyświetlana pod sekcją artykułów. Jeśli pusta, sekcja nie pojawia się na stronie. Sortowanie alfabetyczne automatyczne.",
+            type: "array",
+            of: [
+                defineArrayMember({
+                    type: "reference",
+                    to: [{ type: "product" }],
+                }),
+            ],
+        }),
     ],
     orderings: [
         {
@@ -193,12 +213,14 @@ export const article = defineType({
     preview: {
         select: {
             title: "title",
-            subcategory: "subcategory",
+            subcategoryName: "subcategory.name",
             categoryName: "category.name",
             media: "coverImage",
         },
-        prepare({ title, subcategory, categoryName, media }) {
-            const subtitle = [categoryName, subcategory].filter(Boolean).join(" → ");
+        prepare({ title, subcategoryName, categoryName, media }) {
+            const subtitle = [categoryName, subcategoryName]
+                .filter(Boolean)
+                .join(" → ");
             return {
                 title,
                 subtitle,
