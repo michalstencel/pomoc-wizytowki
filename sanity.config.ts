@@ -15,5 +15,25 @@ export default defineConfig({
     ],
     schema: {
         types: schemaTypes,
+        templates: (prev) => [
+            ...prev,
+            {
+                id: "article-by-category",
+                title: "Artykuł w kategorii",
+                schemaType: "article",
+                parameters: [
+                    {
+                        name: "categoryId",
+                        type: "string",
+                    },
+                ],
+                value: ({ categoryId }: { categoryId: string }) => ({
+                    category: {
+                        _type: "reference",
+                        _ref: categoryId,
+                    },
+                }),
+            },
+        ],
     },
 });

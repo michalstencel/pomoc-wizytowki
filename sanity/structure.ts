@@ -12,10 +12,28 @@ export const structure = (S: StructureBuilder) =>
                         .defaultOrdering([{ field: "order", direction: "asc" }])
                         .child((categoryId) =>
                             S.documentList()
+                                .id("articles-in-category")
                                 .title("Artykuły")
-                                .filter('_type == "article" && category._ref == $categoryId')
+                                .schemaType("article")
+                                .filter(
+                                    '_type == "article" && category._ref == $categoryId',
+                                )
                                 .params({ categoryId })
-                                .defaultOrdering([{ field: "title", direction: "asc" }]),
+                                .defaultOrdering([
+                                    { field: "title", direction: "asc" },
+                                ])
+                                .initialValueTemplates([
+                                    S.initialValueTemplateItem(
+                                        "article-by-category",
+                                        { categoryId },
+                                    ),
+                                ])
+                                .canHandleIntent(
+                                    (intentName, params) =>
+                                        intentName === "create" &&
+                                        params.template ===
+                                            "article-by-category",
+                                ),
                         ),
                 ),
             S.divider(),
@@ -24,13 +42,17 @@ export const structure = (S: StructureBuilder) =>
                 .child(
                     S.documentTypeList("article")
                         .title("Wszystkie artykuły")
-                        .defaultOrdering([{ field: "title", direction: "asc" }]),
+                        .defaultOrdering([
+                            { field: "title", direction: "asc" },
+                        ]),
                 ),
             S.listItem()
                 .title("Wszystkie kategorie")
                 .child(
                     S.documentTypeList("category")
                         .title("Wszystkie kategorie")
-                        .defaultOrdering([{ field: "order", direction: "asc" }]),
+                        .defaultOrdering([
+                            { field: "order", direction: "asc" },
+                        ]),
                 ),
         ]);
