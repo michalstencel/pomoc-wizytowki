@@ -46,7 +46,9 @@ const grouped = articles.reduce(
     {} as Record<string, ArticleListItem[]>,
 );
 
-const subcategoryEntries = Object.entries(grouped);
+const subcategoryEntries = Object.entries(grouped).sort(([a], [b]) =>
+    a.localeCompare(b, "pl"),
+);
 ---
 
 <Layout title={`${category.name} — Centrum pomocy`}>
