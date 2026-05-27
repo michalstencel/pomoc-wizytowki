@@ -2,11 +2,6 @@
 title: Kim jesteśmy
 subcategory: O firmie
 order: 10
-relatedArticles:
-    - title: Misja i wartości
-      slug: misja-i-wartosci
-    - title: Program partnerski
-      slug: program-partnerski
 ---
 
 Jesteśmy wizytowki.co – firmą z bogatą historią sięgającą 2015 roku. Nasza droga rozpoczęła się od studia graficznego oraz Pracowni Wizytówek, które z czasem ewoluowały w markę, którą mają Państwo okazję poznać dzisiaj.

@@ -995,20 +995,39 @@ textarea {
     max-width: 720px;
 }
 
-.article-body > * + * {
-    margin-top: 20px;
+/* Wyzeruj domyślne marginy markdown'a — kontrolujemy spacing przez "* + *" niżej */
+.article-body p,
+.article-body ul,
+.article-body ol,
+.article-body blockquote,
+.article-body pre,
+.article-body h2,
+.article-body h3,
+.article-body h4 {
+    margin: 0;
 }
 
-.article-body p {
-    margin: 0;
+/* Spacing między blokami (paragrafami, listami, blockquote'ami) — kolejność TUTAJ ma znaczenie:
+   ta reguła musi być PO regule margin: 0 wyżej, żeby ją nadpisać przy tej samej specificity. */
+.article-body > * + * {
+    margin-top: 1.25em;
+}
+
+/* Większe oddychanie przed nagłówkami */
+.article-body > h2 + *,
+.article-body > * + h2 {
+    margin-top: 2em;
+}
+
+.article-body > h3 + *,
+.article-body > * + h3 {
+    margin-top: 1.75em;
 }
 
 .article-body h2 {
     font-size: 24px;
     font-weight: 700;
     color: var(--color-text);
-    margin-top: 40px;
-    margin-bottom: 0;
     letter-spacing: -0.01em;
 }
 
@@ -1016,8 +1035,6 @@ textarea {
     font-size: 20px;
     font-weight: 600;
     color: var(--color-text);
-    margin-top: 32px;
-    margin-bottom: 0;
 }
 
 .article-body a {

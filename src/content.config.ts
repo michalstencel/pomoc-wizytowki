@@ -20,8 +20,9 @@ const categories = defineCollection({
  * Slug kategorii = nazwa folderu w src/content/articles/.
  * Slug artykułu = nazwa pliku .md (bez rozszerzenia).
  *
- * Dodaj nowy folder w articles/ → nowa kategoria (musi istnieć też plik meta w categories/).
- * Dodaj nowy plik .md w istniejącym folderze → nowy artykuł automatycznie.
+ * "Podobne tematy" w sidebarze są wyliczane AUTOMATYCZNIE — wszystkie inne artykuły
+ * o tej samej (kategoria + subcategory), posortowane wg `order` i alfabetycznie.
+ * Nie ma potrzeby ręcznie wpisywać `relatedArticles` w frontmatterze.
  */
 const articles = defineCollection({
     // Pattern "*/*.md" wymaga dokładnie jednego poziomu zagnieżdżenia:
@@ -32,14 +33,6 @@ const articles = defineCollection({
         title: z.string(),
         subcategory: z.string().default("Ogólne"),
         order: z.number().default(100),
-        relatedArticles: z
-            .array(
-                z.object({
-                    title: z.string(),
-                    slug: z.string(),
-                }),
-            )
-            .optional(),
     }),
 });
 

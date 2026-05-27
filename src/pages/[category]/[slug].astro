@@ -17,8 +17,25 @@ const { article } = Astro.props;
 const [categorySlug] = article.id.split("/");
 const category = await getEntry("categories", categorySlug);
 const { Content } = await render(article);
+
+// Auto-related: wszystkie inne artykuły z tej samej kategorii i podkategorii.
+// Sortowanie: `order` rosnąco, potem tytuł alfabetycznie po polsku.
+const allArticles = await getCollection("articles");
+const related = allArticles
+    .filter((a) => {
+        const [aCategory] = a.id.split("/");
+        return (
+            aCategory === categorySlug &&
+            a.data.subcategory === article.data.subcategory &&
+            a.id !== article.id
+        );
+    })
+    .sort((a, b) => {
+        if (a.data.order !== b.data.order) return a.data.order - b.data.order;
+        return a.data.title.localeCompare(b.data.title, "pl");
+    });
 ---
 
-<ArticleLayout article={article} category={category}>
+<ArticleLayout article={article} category={category} related={related}>
     <Content />
 </ArticleLayout>

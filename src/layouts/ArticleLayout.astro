@@ -9,10 +9,11 @@ import Footer from "../components/Footer.astro";
 interface Props {
     article: CollectionEntry<"articles">;
     category: CollectionEntry<"categories"> | undefined;
+    related: CollectionEntry<"articles">[];
 }
 
-const { article, category } = Astro.props;
-const { title, relatedArticles } = article.data;
+const { article, category, related } = Astro.props;
+const { title, subcategory } = article.data;
 const [categorySlug] = article.id.split("/");
 const categoryName = category?.data.name ?? categorySlug;
 ---
@@ -48,20 +49,26 @@ const categoryName = category?.data.name ?? categorySlug;
             </div>
 
             {
-                relatedArticles && relatedArticles.length > 0 && (
-                    <aside class="article-related" aria-label="Podobne tematy">
-                        <h2 class="related-title">Podobne tematy</h2>
+                related.length > 0 && (
+                    <aside class="article-related" aria-label={`Podobne tematy z sekcji ${subcategory}`}>
+                        <h2 class="related-title">{subcategory}</h2>
                         <ul class="related-links">
-                            {relatedArticles.map((rel) => (
-                                <li>
-                                    <a
-                                        href={`/${categorySlug}/${rel.slug}/`}
-                                        class="related-link"
-                                    >
-                                        {rel.title}
-                                    </a>
-                                </li>
-                            ))}
+                            {related.map((rel) => {
+                                const slug = rel.id
+                                    .split("/")
+                                    .slice(1)
+                                    .join("/");
+                                return (
+                                    <li>
+                                        <a
+                                            href={`/${categorySlug}/${slug}/`}
+                                            class="related-link"
+                                        >
+                                            {rel.data.title}
+                                        </a>
+                                    </li>
+                                );
+                            })}
                         </ul>
                     </aside>
                 )
