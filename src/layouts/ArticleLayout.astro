@@ -13,7 +13,7 @@ interface Props {
 }
 
 const { article, related } = Astro.props;
-const { title, subcategory, body, coverImage, category } = article;
+const { title, subcategory, body, coverImage, category, quickLinks, quickLinksTitle } = article;
 const categorySlug = category.slug.current;
 const categoryName = category.name;
 
@@ -21,6 +21,14 @@ const coverUrl = coverImage?.asset
     ? urlForImage(coverImage).width(1600).fit("max").auto("format").url()
     : null;
 const coverAlt = coverImage?.alt ?? "";
+
+const sortedQuickLinks = (quickLinks ?? [])
+    .filter((q) => q && q.slug && q.categorySlug)
+    .sort((a, b) => a.title.localeCompare(b.title, "pl"));
+
+const quickLinksHeader =
+    quickLinksTitle?.trim() ||
+    "Przejdź do konkretnej kategorii, aby dowiedzieć się więcej:";
 ---
 
 <Layout title={`${title} — Centrum pomocy`}>
@@ -68,6 +76,28 @@ const coverAlt = coverImage?.alt ?? "";
                 <article class="article-body">
                     <PortableText value={body} />
                 </article>
+
+                {
+                    sortedQuickLinks.length > 0 && (
+                        <section class="article-quick-links" data-pagefind-ignore>
+                            <p class="article-quick-links-intro">
+                                {quickLinksHeader}
+                            </p>
+                            <ul class="article-quick-links-list">
+                                {sortedQuickLinks.map((link) => (
+                                    <li>
+                                        <a
+                                            href={`/${link.categorySlug}/${link.slug}/`}
+                                            class="article-quick-links-item"
+                                        >
+                                            {link.title}
+                                        </a>
+                                    </li>
+                                ))}
+                            </ul>
+                        </section>
+                    )
+                }
             </div>
 
             {

@@ -47,9 +47,18 @@ export interface ArticleListItem {
     };
 }
 
+export interface QuickLink {
+    _id: string;
+    title: string;
+    slug: string;
+    categorySlug: string;
+}
+
 export interface Article extends ArticleListItem {
     coverImage?: SanityImage;
     body?: PortableTextBlock[];
+    quickLinksTitle?: string;
+    quickLinks?: QuickLink[];
 }
 
 export const QUERY_ALL_CATEGORIES = /* groq */ `
@@ -108,6 +117,13 @@ export const QUERY_ARTICLE_BY_SLUG = /* groq */ `
                     "fileSize": file.asset->size
                 }
             }
+        },
+        quickLinksTitle,
+        "quickLinks": quickLinks[]->{
+            _id,
+            title,
+            "slug": slug.current,
+            "categorySlug": category->slug.current
         },
         "category": category->{ _id, name, slug }
     }

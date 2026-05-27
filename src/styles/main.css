@@ -1139,6 +1139,42 @@ textarea {
     text-decoration: none;
 }
 
+.article-quick-links {
+    margin-top: 32px;
+}
+
+.article-quick-links-intro {
+    color: var(--color-text);
+    font-size: 1rem;
+    line-height: 1.5;
+    margin: 0 0 12px;
+}
+
+.article-quick-links-list {
+    list-style: disc;
+    padding-left: 24px;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.article-quick-links-list li::marker {
+    color: var(--color-text-muted);
+}
+
+.article-quick-links-item {
+    color: var(--color-primary);
+    text-decoration: none;
+    transition: color var(--t-base);
+}
+
+.article-quick-links-item:hover {
+    color: var(--color-primary-dark);
+    text-decoration: underline;
+    text-underline-offset: 3px;
+}
+
 .article-file-meta {
     font-size: 0.8125rem;
     color: var(--color-text-muted);

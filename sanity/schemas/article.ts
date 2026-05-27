@@ -139,6 +139,26 @@ export const article = defineType({
                 }),
             ],
         }),
+        defineField({
+            name: "quickLinksTitle",
+            title: "Sekcja \"Przejdź dalej\" — nagłówek (opcjonalny)",
+            type: "string",
+            description:
+                'Tekst nad listą linków. Jeśli pusty, użyjemy domyślnego: "Przejdź do konkretnej kategorii, aby dowiedzieć się więcej:".',
+        }),
+        defineField({
+            name: "quickLinks",
+            title: "Sekcja \"Przejdź dalej\" — linki do artykułów",
+            description:
+                "Lista innych artykułów wyświetlana na dole treści. Jeśli pusta, sekcja nie pojawia się na stronie. Sortowanie alfabetyczne automatyczne.",
+            type: "array",
+            of: [
+                defineArrayMember({
+                    type: "reference",
+                    to: [{ type: "article" }],
+                }),
+            ],
+        }),
     ],
     orderings: [
         {
