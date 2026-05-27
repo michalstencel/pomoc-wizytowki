@@ -253,12 +253,10 @@ textarea {
     text-align: left;
 }
 
-/* Form: relative anchor dla lupki — żeby się nie ruszała przy rozwiniętym drawer */
 .pagefind-ui__form {
     position: relative !important;
 }
 
-/* Search input — padding zwiększony z prawej żeby zrobić miejsce dla "Wyczyść" */
 .pagefind-ui__search-input {
     padding: 14px 96px 14px 48px !important;
     font-size: 1rem !important;
@@ -283,7 +281,6 @@ textarea {
     box-shadow: 0 0 0 4px rgba(0, 122, 255, 0.12) !important;
 }
 
-/* Lupka po lewej — wycentrowana pionowo względem inputu */
 .pagefind-ui__form::before {
     width: 20px !important;
     height: 20px !important;
@@ -296,7 +293,6 @@ textarea {
     pointer-events: none;
 }
 
-/* "Wyczyść" — wycentrowany pionowo, przy prawej krawędzi inputu */
 .pagefind-ui__search-clear {
     position: absolute !important;
     right: 16px !important;
@@ -318,7 +314,6 @@ textarea {
     color: var(--color-text) !important;
 }
 
-/* Drawer wyników */
 .pagefind-ui__drawer {
     background: #fff;
     border-radius: var(--radius-sm);
@@ -333,7 +328,6 @@ textarea {
     display: none !important;
 }
 
-/* Ukryj wszelkie placeholder-y obrazków i loadingi — to ŹRÓDŁO "drugiej lupki" pod tekstem wyników */
 .pagefind-ui__result-thumb,
 .pagefind-ui__result-image,
 .pagefind-ui__loading,
@@ -394,7 +388,6 @@ textarea {
     margin: 0 !important;
 }
 
-/* "1 wynik dla X" — bez domyślnych tłem-lupek, czyste typo */
 .pagefind-ui__message {
     padding: 12px 24px !important;
     color: var(--color-text-muted) !important;
@@ -995,9 +988,6 @@ textarea {
     max-width: 720px;
 }
 
-/* Spacing markdown'a — klasyczne podejście margin-bottom.
-   Używamy margin-bottom (nie margin-top z "* + *"), bo selektor z tagiem (np. ".article-body p")
-   ma WYŻSZĄ specificity niż ".article-body > * + *" — wcześniejsza próba przegrywała kaskadę. */
 .article-body p,
 .article-body ul,
 .article-body ol,
@@ -1031,12 +1021,10 @@ textarea {
     margin: 1.5em 0 0.5em 0;
 }
 
-/* Pierwszy element bez górnego marginesu — żeby header nie odjeżdżał od tytułu */
 .article-body > *:first-child {
     margin-top: 0;
 }
 
-/* Ostatni element bez dolnego marginesu — żeby nie wystawał za .article-body */
 .article-body > *:last-child {
     margin-bottom: 0;
 }
@@ -1093,7 +1081,34 @@ textarea {
     border-radius: var(--radius-sm);
 }
 
-/* ARTICLE RELATED (sidebar) */
+.article-cover {
+    width: 100%;
+    height: auto;
+    border-radius: var(--radius-md);
+    margin-bottom: 32px;
+}
+
+.article-figure {
+    margin: 0;
+    text-align: center;
+}
+
+.article-figure img {
+    width: 100%;
+    height: auto;
+    border-radius: var(--radius-sm);
+}
+
+.article-figcaption {
+    font-size: 0.875rem;
+    color: var(--color-text-muted);
+    margin-top: 8px;
+    font-style: italic;
+}
+
+/* ============================================================
+   ARTICLE RELATED
+   ============================================================ */
 .article-related {
     border-left: 1px solid var(--color-border);
     padding-left: 32px;

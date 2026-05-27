@@ -1,50 +1,59 @@
 ---
-import { getCollection } from "astro:content";
 import Layout from "../../layouts/Layout.astro";
 import Nav from "../../components/Nav.astro";
 import CtaBanner from "../../components/CtaBanner.astro";
 import Brands from "../../components/Brands.astro";
 import Footer from "../../components/Footer.astro";
+import {
+    client,
+    QUERY_ALL_CATEGORIES,
+    QUERY_CATEGORY_BY_SLUG,
+    QUERY_ARTICLES_BY_CATEGORY,
+    type Category,
+    type ArticleListItem,
+} from "../../lib/sanity";
 
 export async function getStaticPaths() {
-    const categories = await getCollection("categories");
+    const categories = await client.fetch<Category[]>(QUERY_ALL_CATEGORIES);
     return categories.map((category) => ({
-        params: { category: category.id },
-        props: { category },
+        params: { category: category.slug.current },
     }));
 }
 
-const { category } = Astro.props;
+const { category: categorySlug } = Astro.params;
 
-// Wszystkie artykuły tej kategorii (folder = kategoria).
-// W glob loader id ma format "kategoria/slug" (bez rozszerzenia .md).
-const articles = (await getCollection("articles"))
-    .filter((a) => a.id.split("/")[0] === category.id)
-    .sort((a, b) => {
-        if (a.data.order !== b.data.order) return a.data.order - b.data.order;
-        return a.data.title.localeCompare(b.data.title, "pl");
-    });
+const category = await client.fetch<Category | null>(QUERY_CATEGORY_BY_SLUG, {
+    slug: categorySlug,
+});
 
-// Grupowanie po podkategorii (z frontmattera artykułu).
+if (!category) {
+    return Astro.redirect("/404");
+}
+
+const articles = await client.fetch<ArticleListItem[]>(
+    QUERY_ARTICLES_BY_CATEGORY,
+    { slug: categorySlug },
+);
+
 const grouped = articles.reduce(
     (acc, article) => {
-        const sub = article.data.subcategory;
+        const sub = article.subcategory;
         if (!acc[sub]) acc[sub] = [];
         acc[sub].push(article);
         return acc;
     },
-    {} as Record<string, typeof articles>,
+    {} as Record<string, ArticleListItem[]>,
 );
 
 const subcategoryEntries = Object.entries(grouped);
 ---
 
-<Layout title={`${category.data.name} — Centrum pomocy`}>
+<Layout title={`${category.name} — Centrum pomocy`}>
     <Nav variant="light" />
     <main class="category-main">
         <div class="category-container">
             <div class="category-header">
-                <h1 class="category-title">{category.data.name}</h1>
+                <h1 class="category-title">{category.name}</h1>
                 <a href="/" class="category-back">← wróć do Centrum Pomocy</a>
             </div>
 
@@ -62,22 +71,16 @@ const subcategoryEntries = Object.entries(grouped);
                                     {subcategory}
                                 </h2>
                                 <ul class="category-links">
-                                    {items.map((article) => {
-                                        const slug = article.id
-                                            .split("/")
-                                            .slice(1)
-                                            .join("/");
-                                        return (
-                                            <li>
-                                                <a
-                                                    href={`/${category.id}/${slug}/`}
-                                                    class="category-link"
-                                                >
-                                                    {article.data.title}
-                                                </a>
-                                            </li>
-                                        );
-                                    })}
+                                    {items.map((article) => (
+                                        <li>
+                                            <a
+                                                href={`/${categorySlug}/${article.slug.current}/`}
+                                                class="category-link"
+                                            >
+                                                {article.title}
+                                            </a>
+                                        </li>
+                                    ))}
                                 </ul>
                             </div>
                         ))}

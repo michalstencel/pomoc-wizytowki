@@ -40,14 +40,12 @@ const {
             rel="stylesheet"
         />
 
-        <!-- Pagefind UI (statyczne pliki generowane podczas `npm run build`) -->
         <link href="/pagefind/pagefind-ui.css" rel="stylesheet" />
     </head>
     <body>
         <slot />
 
         <script is:inline>
-            // Auto-update strefy czasowej dla Polski (CET ↔ CEST).
             (function () {
                 var parts = new Intl.DateTimeFormat("en-US", {
                     timeZone: "Europe/Warsaw",

@@ -1,23 +1,17 @@
 ---
-import { getCollection } from "astro:content";
 import Layout from "../layouts/Layout.astro";
 import Nav from "../components/Nav.astro";
 import CtaBanner from "../components/CtaBanner.astro";
 import Brands from "../components/Brands.astro";
 import Footer from "../components/Footer.astro";
+import { client, QUERY_ALL_CATEGORIES, type Category } from "../lib/sanity";
 
-// Kategorie są ładowane automatycznie ze src/content/categories/*.json
-// Sortowane po polu `order`, potem alfabetycznie po nazwie.
-const categories = (await getCollection("categories")).sort((a, b) => {
-    if (a.data.order !== b.data.order) return a.data.order - b.data.order;
-    return a.data.name.localeCompare(b.data.name, "pl");
-});
+const categories = await client.fetch<Category[]>(QUERY_ALL_CATEGORIES);
 ---
 
 <Layout title="Centrum pomocy — wizytowki.co">
     <Nav variant="dark" />
 
-    <!-- HERO -->
     <section class="hero">
         <div class="hero-inner">
             <h1 class="hero-title">Centrum pomocy</h1>
@@ -32,7 +26,6 @@ const categories = (await getCollection("categories")).sort((a, b) => {
         </div>
     </section>
 
-    <!-- TOPICS -->
     <section class="topics-section">
         <div class="topics-container">
             <h2 class="section-heading">
@@ -45,9 +38,9 @@ const categories = (await getCollection("categories")).sort((a, b) => {
                 {
                     categories.map((category) => (
                         <a
-                            href={`/${category.id}/`}
+                            href={`/${category.slug.current}/`}
                             class="topic-card"
-                            aria-label={`Kategoria: ${category.data.name}`}
+                            aria-label={`Kategoria: ${category.name}`}
                         >
                             <div class="topic-card-icon" aria-hidden="true">
                                 <svg
@@ -65,10 +58,10 @@ const categories = (await getCollection("categories")).sort((a, b) => {
                             </div>
                             <div class="topic-card-body">
                                 <h3 class="topic-card-title">
-                                    {category.data.name}
+                                    {category.name}
                                 </h3>
                                 <p class="topic-card-desc">
-                                    {category.data.description}
+                                    {category.description}
                                 </p>
                             </div>
                         </a>
@@ -83,12 +76,6 @@ const categories = (await getCollection("categories")).sort((a, b) => {
     <Footer />
 </Layout>
 
-<!--
-    Pagefind UI: indeks i UI generowane przez astro-pagefind w trakcie `astro build`.
-    Pliki są dostępne pod /pagefind/* w czasie runtime.
-    Używamy is:inline, żeby Vite/Rollup NIE próbowało rozwiązać tych ścieżek w czasie buildu
-    (plik /pagefind/pagefind-ui.js powstaje dopiero PO astro build).
--->
 <script is:inline src="/pagefind/pagefind-ui.js" defer></script>
 <script is:inline>
     window.addEventListener("DOMContentLoaded", () => {

@@ -1,21 +1,26 @@
 ---
-import type { CollectionEntry } from "astro:content";
 import Layout from "./Layout.astro";
 import Nav from "../components/Nav.astro";
 import CtaBanner from "../components/CtaBanner.astro";
 import Brands from "../components/Brands.astro";
 import Footer from "../components/Footer.astro";
+import PortableText from "../components/PortableText.astro";
+import { urlForImage, type Article, type ArticleListItem } from "../lib/sanity";
 
 interface Props {
-    article: CollectionEntry<"articles">;
-    category: CollectionEntry<"categories"> | undefined;
-    related: CollectionEntry<"articles">[];
+    article: Article;
+    related: ArticleListItem[];
 }
 
-const { article, category, related } = Astro.props;
-const { title, subcategory } = article.data;
-const [categorySlug] = article.id.split("/");
-const categoryName = category?.data.name ?? categorySlug;
+const { article, related } = Astro.props;
+const { title, subcategory, body, coverImage, category } = article;
+const categorySlug = category.slug.current;
+const categoryName = category.name;
+
+const coverUrl = coverImage?.asset
+    ? urlForImage(coverImage).width(1600).fit("max").auto("format").url()
+    : null;
+const coverAlt = coverImage?.alt ?? "";
 ---
 
 <Layout title={`${title} — Centrum pomocy`}>
@@ -27,7 +32,11 @@ const categoryName = category?.data.name ?? categorySlug;
                     <h1 class="article-title" data-pagefind-meta="title">
                         {title}
                     </h1>
-                    <nav class="breadcrumb" aria-label="Ścieżka okruszków" data-pagefind-ignore>
+                    <nav
+                        class="breadcrumb"
+                        aria-label="Ścieżka okruszków"
+                        data-pagefind-ignore
+                    >
                         <a href="https://wizytowki.co" class="breadcrumb-link"
                             >Strona główna</a
                         >
@@ -43,32 +52,42 @@ const categoryName = category?.data.name ?? categorySlug;
                     </nav>
                     <meta data-pagefind-meta={`kategoria:${categoryName}`} />
                 </div>
+
+                {
+                    coverUrl && (
+                        <img
+                            src={coverUrl}
+                            alt={coverAlt}
+                            class="article-cover"
+                            loading="eager"
+                            decoding="async"
+                        />
+                    )
+                }
+
                 <article class="article-body">
-                    <slot />
+                    <PortableText value={body} />
                 </article>
             </div>
 
             {
                 related.length > 0 && (
-                    <aside class="article-related" aria-label={`Podobne tematy z sekcji ${subcategory}`}>
+                    <aside
+                        class="article-related"
+                        aria-label={`Podobne tematy z sekcji ${subcategory}`}
+                    >
                         <h2 class="related-title">{subcategory}</h2>
                         <ul class="related-links">
-                            {related.map((rel) => {
-                                const slug = rel.id
-                                    .split("/")
-                                    .slice(1)
-                                    .join("/");
-                                return (
-                                    <li>
-                                        <a
-                                            href={`/${categorySlug}/${slug}/`}
-                                            class="related-link"
-                                        >
-                                            {rel.data.title}
-                                        </a>
-                                    </li>
-                                );
-                            })}
+                            {related.map((rel) => (
+                                <li>
+                                    <a
+                                        href={`/${categorySlug}/${rel.slug.current}/`}
+                                        class="related-link"
+                                    >
+                                        {rel.title}
+                                    </a>
+                                </li>
+                            ))}
                         </ul>
                     </aside>
                 )

@@ -1,41 +1,41 @@
 ---
-import { getCollection, getEntry, render } from "astro:content";
 import ArticleLayout from "../../layouts/ArticleLayout.astro";
+import {
+    client,
+    QUERY_ALL_ARTICLE_PATHS,
+    QUERY_ARTICLE_BY_SLUG,
+    QUERY_RELATED_ARTICLES,
+    type Article,
+    type ArticleListItem,
+} from "../../lib/sanity";
 
 export async function getStaticPaths() {
-    const articles = await getCollection("articles");
-    return articles.map((article) => {
-        const [category, ...rest] = article.id.split("/");
-        return {
-            params: { category, slug: rest.join("/") },
-            props: { article },
-        };
-    });
+    const paths = await client.fetch<{ slug: string; categorySlug: string }[]>(
+        QUERY_ALL_ARTICLE_PATHS,
+    );
+    return paths
+        .filter((p) => p.slug && p.categorySlug)
+        .map((p) => ({
+            params: { category: p.categorySlug, slug: p.slug },
+        }));
 }
 
-const { article } = Astro.props;
-const [categorySlug] = article.id.split("/");
-const category = await getEntry("categories", categorySlug);
-const { Content } = await render(article);
+const { category: categorySlug, slug } = Astro.params;
 
-// Auto-related: wszystkie inne artykuły z tej samej kategorii i podkategorii.
-// Sortowanie: `order` rosnąco, potem tytuł alfabetycznie po polsku.
-const allArticles = await getCollection("articles");
-const related = allArticles
-    .filter((a) => {
-        const [aCategory] = a.id.split("/");
-        return (
-            aCategory === categorySlug &&
-            a.data.subcategory === article.data.subcategory &&
-            a.id !== article.id
-        );
-    })
-    .sort((a, b) => {
-        if (a.data.order !== b.data.order) return a.data.order - b.data.order;
-        return a.data.title.localeCompare(b.data.title, "pl");
-    });
+const article = await client.fetch<Article | null>(QUERY_ARTICLE_BY_SLUG, {
+    slug,
+    category: categorySlug,
+});
+
+if (!article) {
+    return Astro.redirect("/404");
+}
+
+const related = await client.fetch<ArticleListItem[]>(QUERY_RELATED_ARTICLES, {
+    categorySlug,
+    subcategory: article.subcategory,
+    currentSlug: slug,
+});
 ---
 
-<ArticleLayout article={article} category={category} related={related}>
-    <Content />
-</ArticleLayout>
+<ArticleLayout article={article} related={related} />

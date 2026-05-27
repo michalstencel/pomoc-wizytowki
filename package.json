@@ -9,15 +9,32 @@
         "dev": "astro dev",
         "build": "astro build",
         "preview": "astro preview",
-        "astro": "astro"
+        "astro": "astro",
+        "sanity:dev": "sanity dev",
+        "sanity:start": "sanity start",
+        "sanity:deploy": "sanity deploy",
+        "sanity:build": "sanity build",
+        "seed": "node scripts/seed.mjs"
     },
     "dependencies": {
+        "@portabletext/to-html": "^2.0.13",
+        "@portabletext/types": "^2.0.13",
+        "@sanity/astro": "^3.4.0",
+        "@sanity/client": "^7.14.1",
+        "@sanity/image-url": "^1.1.0",
+        "@sanity/vision": "^4.0.0",
         "@tailwindcss/vite": "^4.3.0",
         "astro": "^6.3.7",
         "astro-pagefind": "^1.8.3",
+        "react": "^18.3.1",
+        "react-dom": "^18.3.1",
+        "sanity": "^4.0.0",
+        "styled-components": "^6.1.13",
         "tailwindcss": "^4.3.0"
     },
     "devDependencies": {
+        "@types/react": "^18.3.12",
+        "@types/react-dom": "^18.3.1",
         "pagefind": "^1.4.0"
     }
 }

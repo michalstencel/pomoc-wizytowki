@@ -2,10 +2,18 @@
 import { defineConfig } from "astro/config";
 import tailwindcss from "@tailwindcss/vite";
 import pagefind from "astro-pagefind";
+import sanity from "@sanity/astro";
 
-// https://astro.build/config
 export default defineConfig({
-    integrations: [pagefind()],
+    integrations: [
+        sanity({
+            projectId: "5xmnoyz1",
+            dataset: "production",
+            useCdn: true,
+            apiVersion: "2024-01-01",
+        }),
+        pagefind(),
+    ],
     vite: {
         plugins: [tailwindcss()],
     },
