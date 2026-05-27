@@ -15,7 +15,8 @@
         "sanity:deploy": "sanity deploy",
         "sanity:build": "sanity build",
         "seed": "node scripts/seed.mjs",
-        "migrate:subcategories": "node scripts/migrate-subcategories.mjs"
+        "migrate:subcategories": "node scripts/migrate-subcategories.mjs",
+        "migrate:placements": "node scripts/migrate-placements.mjs"
     },
     "dependencies": {
         "@portabletext/to-html": "^2.0.13",

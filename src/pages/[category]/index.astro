@@ -36,14 +36,23 @@ const articles = (
     })
 ).sort((a, b) => a.title.localeCompare(b.title, "pl"));
 
+interface GroupedArticle {
+    article: ArticleListItem;
+    subcategoryName: string;
+}
+
 const grouped = articles.reduce(
     (acc, article) => {
-        const sub = article.subcategory;
+        const placement = article.placements.find(
+            (p) => p.category.slug.current === categorySlug,
+        );
+        if (!placement) return acc;
+        const sub = placement.subcategory;
         if (!acc[sub]) acc[sub] = [];
-        acc[sub].push(article);
+        acc[sub].push({ article, subcategoryName: sub });
         return acc;
     },
-    {} as Record<string, ArticleListItem[]>,
+    {} as Record<string, GroupedArticle[]>,
 );
 
 const subcategoryEntries = Object.entries(grouped).sort(([a], [b]) =>
@@ -74,7 +83,7 @@ const subcategoryEntries = Object.entries(grouped).sort(([a], [b]) =>
                                     {subcategory}
                                 </h2>
                                 <ul class="category-links">
-                                    {items.map((article) => (
+                                    {items.map(({ article }) => (
                                         <li>
                                             <a
                                                 href={`/${categorySlug}/${article.slug.current}/`}

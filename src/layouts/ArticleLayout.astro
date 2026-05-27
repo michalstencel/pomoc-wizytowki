@@ -5,27 +5,32 @@ import CtaBanner from "../components/CtaBanner.astro";
 import Brands from "../components/Brands.astro";
 import Footer from "../components/Footer.astro";
 import PortableText from "../components/PortableText.astro";
-import { urlForImage, type Article, type ArticleListItem } from "../lib/sanity";
+import {
+    urlForImage,
+    type Article,
+    type ArticleListItem,
+    type Placement,
+} from "../lib/sanity";
 
 interface Props {
     article: Article;
     related: ArticleListItem[];
+    currentPlacement: Placement;
 }
 
-const { article, related } = Astro.props;
+const { article, related, currentPlacement } = Astro.props;
 const {
     title,
-    subcategory,
     body,
     coverImage,
-    category,
     quickLinks,
     quickLinksTitle,
     relatedProducts,
     relatedProductsTitle,
 } = article;
-const categorySlug = category.slug.current;
-const categoryName = category.name;
+const categorySlug = currentPlacement.category.slug.current;
+const categoryName = currentPlacement.category.name;
+const subcategoryName = currentPlacement.subcategory;
 
 const coverUrl = coverImage?.asset
     ? urlForImage(coverImage).width(1600).fit("max").auto("format").url()
@@ -151,9 +156,9 @@ const relatedProductsHeader =
                 related.length > 0 && (
                     <aside
                         class="article-related"
-                        aria-label={`Podobne tematy z sekcji ${subcategory}`}
+                        aria-label={`Podobne tematy z sekcji ${subcategoryName}`}
                     >
-                        <h2 class="related-title">{subcategory}</h2>
+                        <h2 class="related-title">{subcategoryName}</h2>
                         <ul class="related-links">
                             {related.map((rel) => (
                                 <li>

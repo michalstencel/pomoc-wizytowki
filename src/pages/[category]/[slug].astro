@@ -10,14 +10,17 @@ import {
 } from "../../lib/sanity";
 
 export async function getStaticPaths() {
-    const paths = await client.fetch<{ slug: string; categorySlug: string }[]>(
-        QUERY_ALL_ARTICLE_PATHS,
+    const paths = await client.fetch<
+        { slug: string; categorySlugs: string[] }[]
+    >(QUERY_ALL_ARTICLE_PATHS);
+
+    return paths.flatMap((p) =>
+        (p.categorySlugs ?? [])
+            .filter((c): c is string => Boolean(c))
+            .map((categorySlug) => ({
+                params: { category: categorySlug, slug: p.slug },
+            })),
     );
-    return paths
-        .filter((p) => p.slug && p.categorySlug)
-        .map((p) => ({
-            params: { category: p.categorySlug, slug: p.slug },
-        }));
 }
 
 const { category: categorySlug, slug } = Astro.params;
@@ -31,15 +34,27 @@ if (!article) {
     return Astro.redirect("/404");
 }
 
-const related = article.subcategoryRef
+const currentPlacement = article.placements.find(
+    (p) => p.category.slug.current === categorySlug,
+);
+
+if (!currentPlacement) {
+    return Astro.redirect("/404");
+}
+
+const related = currentPlacement.subcategoryRef
     ? (
           await client.fetch<ArticleListItem[]>(QUERY_RELATED_ARTICLES, {
               categorySlug,
-              subcategoryRef: article.subcategoryRef,
+              subcategoryRef: currentPlacement.subcategoryRef,
               currentSlug: slug,
           })
       ).sort((a, b) => a.title.localeCompare(b.title, "pl"))
     : [];
 ---
 
-<ArticleLayout article={article} related={related} />
+<ArticleLayout
+    article={article}
+    related={related}
+    currentPlacement={currentPlacement}
+/>

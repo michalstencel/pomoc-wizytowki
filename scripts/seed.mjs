@@ -1,6 +1,7 @@
 import { createClient } from "@sanity/client";
 import { readFileSync } from "node:fs";
 import { resolve } from "node:path";
+import { randomUUID } from "node:crypto";
 
 const envPath = resolve(process.cwd(), ".env");
 try {
@@ -108,8 +109,17 @@ async function seed() {
             _type: "article",
             title: art.title,
             slug: { _type: "slug", current: art.slug },
-            category: { _type: "reference", _ref: art.categoryRef },
-            subcategory: { _type: "reference", _ref: art.subcategoryRef },
+            placements: [
+                {
+                    _type: "placement",
+                    _key: randomUUID(),
+                    category: { _type: "reference", _ref: art.categoryRef },
+                    subcategory: {
+                        _type: "reference",
+                        _ref: art.subcategoryRef,
+                    },
+                },
+            ],
             body: art.body,
         });
         console.log(`  ${art.title}`);

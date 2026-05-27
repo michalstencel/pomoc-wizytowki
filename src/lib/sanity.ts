@@ -35,16 +35,21 @@ export interface Category {
     order: number;
 }
 
-export interface ArticleListItem {
-    _id: string;
-    title: string;
-    slug: SanitySlug;
-    subcategory: string;
+export interface Placement {
     category: {
         _id: string;
         name: string;
         slug: SanitySlug;
     };
+    subcategory: string;
+    subcategoryRef: string;
+}
+
+export interface ArticleListItem {
+    _id: string;
+    title: string;
+    slug: SanitySlug;
+    placements: Placement[];
 }
 
 export interface QuickLink {
@@ -62,7 +67,6 @@ export interface RelatedProduct {
 }
 
 export interface Article extends ArticleListItem {
-    subcategoryRef?: string;
     coverImage?: SanityImage;
     body?: PortableTextBlock[];
     quickLinksTitle?: string;
@@ -95,13 +99,16 @@ export const QUERY_ARTICLES_BY_CATEGORY = /* groq */ `
     *[
         _type == "article"
         && defined(slug.current)
-        && category->slug.current == $slug
+        && $slug in placements[].category->slug.current
     ] | order(title asc) {
         _id,
         title,
         slug,
-        "subcategory": subcategory->name,
-        "category": category->{ _id, name, slug }
+        "placements": placements[]{
+            "category": category->{ _id, name, slug },
+            "subcategory": subcategory->name,
+            "subcategoryRef": subcategory._ref
+        }
     }
 `;
 
@@ -109,13 +116,16 @@ export const QUERY_ARTICLE_BY_SLUG = /* groq */ `
     *[
         _type == "article"
         && slug.current == $slug
-        && category->slug.current == $category
+        && $category in placements[].category->slug.current
     ][0] {
         _id,
         title,
         slug,
-        "subcategory": subcategory->name,
-        "subcategoryRef": subcategory._ref,
+        "placements": placements[]{
+            "category": category->{ _id, name, slug },
+            "subcategory": subcategory->name,
+            "subcategoryRef": subcategory._ref
+        },
         coverImage,
         body[]{
             ...,
@@ -134,7 +144,7 @@ export const QUERY_ARTICLE_BY_SLUG = /* groq */ `
             _id,
             title,
             "slug": slug.current,
-            "categorySlug": category->slug.current
+            "categorySlug": placements[0].category->slug.current
         },
         relatedProductsTitle,
         "relatedProducts": relatedProducts[]->{
@@ -142,8 +152,7 @@ export const QUERY_ARTICLE_BY_SLUG = /* groq */ `
             name,
             url,
             description
-        },
-        "category": category->{ _id, name, slug }
+        }
     }
 `;
 
@@ -151,10 +160,9 @@ export const QUERY_ALL_ARTICLE_PATHS = /* groq */ `
     *[
         _type == "article"
         && defined(slug.current)
-        && defined(category->slug.current)
     ] {
         "slug": slug.current,
-        "categorySlug": category->slug.current
+        "categorySlugs": placements[].category->slug.current
     }
 `;
 
@@ -162,14 +170,19 @@ export const QUERY_RELATED_ARTICLES = /* groq */ `
     *[
         _type == "article"
         && defined(slug.current)
-        && category->slug.current == $categorySlug
-        && subcategory._ref == $subcategoryRef
         && slug.current != $currentSlug
+        && count(placements[
+            category->slug.current == $categorySlug
+            && subcategory._ref == $subcategoryRef
+        ]) > 0
     ] | order(title asc) {
         _id,
         title,
         slug,
-        "subcategory": subcategory->name,
-        "category": category->{ _id, name, slug }
+        "placements": placements[]{
+            "category": category->{ _id, name, slug },
+            "subcategory": subcategory->name,
+            "subcategoryRef": subcategory._ref
+        }
     }
 `;

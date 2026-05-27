@@ -22,35 +22,76 @@ export const article = defineType({
             validation: (Rule) => Rule.required(),
         }),
         defineField({
-            name: "category",
-            title: "Kategoria",
-            type: "reference",
-            to: [{ type: "category" }],
-            description: "Do której kategorii należy artykuł.",
-            validation: (Rule) => Rule.required(),
-        }),
-        defineField({
-            name: "subcategory",
-            title: "Podkategoria",
-            type: "reference",
-            to: [{ type: "subcategory" }],
+            name: "placements",
+            title: "Pojawienia w kategoriach",
             description:
-                'Wybierz podkategorię z listy. Lista jest filtrowana — pokazuje tylko podkategorie z wybranej powyżej kategorii. Jeśli potrzebujesz nowej podkategorii, utwórz ją w "Wszystkie podkategorie".',
-            options: {
-                filter: ({ document }) => {
-                    const categoryRef = (
-                        document?.category as { _ref?: string } | undefined
-                    )?._ref;
-                    if (!categoryRef) {
-                        return { filter: "false" };
-                    }
-                    return {
-                        filter: "category._ref == $categoryRef",
-                        params: { categoryRef },
-                    };
-                },
-            },
-            validation: (Rule) => Rule.required(),
+                "Artykuł może pojawiać się w wielu kategoriach jednocześnie. Każde pojawienie ma własną podkategorię. Dla każdej kategorii generowany jest osobny URL prowadzący do tej samej treści, z odpowiednimi breadcrumbami i powiązanymi tematami.",
+            type: "array",
+            of: [
+                defineArrayMember({
+                    type: "object",
+                    name: "placement",
+                    title: "Pojawienie",
+                    fields: [
+                        defineField({
+                            name: "category",
+                            title: "Kategoria",
+                            type: "reference",
+                            to: [{ type: "category" }],
+                            validation: (Rule) => Rule.required(),
+                        }),
+                        defineField({
+                            name: "subcategory",
+                            title: "Podkategoria",
+                            type: "reference",
+                            to: [{ type: "subcategory" }],
+                            description:
+                                'Lista filtrowana — pokazuje tylko podkategorie z wybranej powyżej kategorii.',
+                            options: {
+                                filter: ({ parent }) => {
+                                    const categoryRef = (
+                                        parent as
+                                            | {
+                                                  category?: { _ref?: string };
+                                              }
+                                            | undefined
+                                    )?.category?._ref;
+                                    if (!categoryRef) {
+                                        return { filter: "false" };
+                                    }
+                                    return {
+                                        filter:
+                                            "category._ref == $categoryRef",
+                                        params: { categoryRef },
+                                    };
+                                },
+                            },
+                            validation: (Rule) => Rule.required(),
+                        }),
+                    ],
+                    preview: {
+                        select: {
+                            categoryName: "category.name",
+                            subcategoryName: "subcategory.name",
+                        },
+                        prepare({ categoryName, subcategoryName }) {
+                            return {
+                                title:
+                                    categoryName ?? "(brak kategorii)",
+                                subtitle:
+                                    subcategoryName ??
+                                    "(brak podkategorii)",
+                            };
+                        },
+                    },
+                }),
+            ],
+            validation: (Rule) =>
+                Rule.required()
+                    .min(1)
+                    .error(
+                        "Artykuł musi mieć co najmniej jedno pojawienie (kategoria + podkategoria).",
+                    ),
         }),
         defineField({
             name: "coverImage",
@@ -201,29 +242,32 @@ export const article = defineType({
             name: "titleAsc",
             by: [{ field: "title", direction: "asc" }],
         },
-        {
-            title: "Podkategoria → tytuł",
-            name: "subcategoryThenTitle",
-            by: [
-                { field: "subcategory", direction: "asc" },
-                { field: "title", direction: "asc" },
-            ],
-        },
     ],
     preview: {
         select: {
             title: "title",
-            subcategoryName: "subcategory.name",
-            categoryName: "category.name",
+            firstCategoryName: "placements.0.category.name",
+            firstSubcategoryName: "placements.0.subcategory.name",
+            placementsCount: "placements",
             media: "coverImage",
         },
-        prepare({ title, subcategoryName, categoryName, media }) {
-            const subtitle = [categoryName, subcategoryName]
-                .filter(Boolean)
-                .join(" → ");
+        prepare({
+            title,
+            firstCategoryName,
+            firstSubcategoryName,
+            placementsCount,
+            media,
+        }) {
+            const count = Array.isArray(placementsCount)
+                ? placementsCount.length
+                : 0;
+            const parts = [firstCategoryName, firstSubcategoryName].filter(
+                Boolean,
+            );
+            const extra = count > 1 ? ` (+${count - 1})` : "";
             return {
                 title,
-                subtitle,
+                subtitle: parts.length ? parts.join(" → ") + extra : "",
                 media,
             };
         },

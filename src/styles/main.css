@@ -250,6 +250,8 @@ textarea {
     --pagefind-ui-image-box-ratio: 3 / 2;
     --pagefind-ui-font: var(--font-sans);
     width: 100%;
+    max-width: 482px;
+    margin: 0 auto;
     text-align: left;
 }
 
@@ -258,9 +260,10 @@ textarea {
 }
 
 .pagefind-ui__search-input {
-    padding: 14px 96px 14px 48px !important;
+    height: 50px !important;
+    padding: 0 96px 0 18px !important;
     font-size: 1rem !important;
-    line-height: 1.5rem !important;
+    line-height: 50px !important;
     background-image: none !important;
     box-shadow: var(--shadow-sm);
     transition:
@@ -269,7 +272,7 @@ textarea {
 }
 
 .pagefind-ui__search-input::placeholder {
-    color: var(--color-text-muted);
+    color: #9cb4dd;
     font-weight: 400;
     font-size: 1rem;
     letter-spacing: 0;
@@ -282,15 +285,7 @@ textarea {
 }
 
 .pagefind-ui__form::before {
-    width: 20px !important;
-    height: 20px !important;
-    top: 50% !important;
-    left: 18px !important;
-    bottom: auto !important;
-    margin: 0 !important;
-    transform: translateY(-50%) !important;
-    background-size: 20px 20px !important;
-    pointer-events: none;
+    display: none !important;
 }
 
 .pagefind-ui__search-clear {
