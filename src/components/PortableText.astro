@@ -18,6 +18,13 @@ function escapeHtml(input: string): string {
         .replace(/'/g, "&#39;");
 }
 
+function formatFileSize(bytes?: number): string {
+    if (!bytes) return "";
+    if (bytes < 1024) return `${bytes} B`;
+    if (bytes < 1024 * 1024) return `${(bytes / 1024).toFixed(0)} KB`;
+    return `${(bytes / (1024 * 1024)).toFixed(1)} MB`;
+}
+
 const components: Partial<PortableTextHtmlComponents> = {
     types: {
         image: ({ value }) => {
@@ -47,6 +54,19 @@ const components: Partial<PortableTextHtmlComponents> = {
                 ? ' rel="noopener noreferrer" target="_blank"'
                 : "";
             return `<a href="${safeHref}"${externalAttrs}>${children}</a>`;
+        },
+        fileLink: ({ children, value }) => {
+            const fileUrl = value?.fileUrl as string | undefined;
+            if (!fileUrl) return `${children}`;
+            const safeUrl = escapeHtml(fileUrl);
+            const fileName = value?.fileName as string | undefined;
+            const fileSize = formatFileSize(value?.fileSize as number | undefined);
+            const ext = fileName?.split(".").pop()?.toUpperCase() ?? "";
+            const meta = [ext, fileSize].filter(Boolean).join(" · ");
+            const metaSpan = meta
+                ? `<span class="article-file-meta">${escapeHtml(meta)}</span>`
+                : "";
+            return `<a href="${safeUrl}" class="article-file-link" target="_blank" rel="noopener noreferrer">${children}${metaSpan}</a>`;
         },
         code: ({ children }) => `<code>${children}</code>`,
         "strike-through": ({ children }) => `<s>${children}</s>`,

@@ -90,7 +90,7 @@ export const article = defineType({
                             {
                                 name: "link",
                                 type: "object",
-                                title: "Link",
+                                title: "Link (URL)",
                                 fields: [
                                     defineField({
                                         name: "href",
@@ -101,6 +101,19 @@ export const article = defineType({
                                                 allowRelative: true,
                                                 scheme: ["http", "https", "mailto", "tel"],
                                             }),
+                                    }),
+                                ],
+                            },
+                            {
+                                name: "fileLink",
+                                type: "object",
+                                title: "Link do pliku (PDF, DOC itp.)",
+                                fields: [
+                                    defineField({
+                                        name: "file",
+                                        type: "file",
+                                        title: "Plik",
+                                        validation: (Rule) => Rule.required(),
                                     }),
                                 ],
                             },

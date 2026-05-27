@@ -97,7 +97,18 @@ export const QUERY_ARTICLE_BY_SLUG = /* groq */ `
         slug,
         subcategory,
         coverImage,
-        body,
+        body[]{
+            ...,
+            markDefs[]{
+                ...,
+                _type == "fileLink" => {
+                    ...,
+                    "fileUrl": file.asset->url,
+                    "fileName": file.asset->originalFilename,
+                    "fileSize": file.asset->size
+                }
+            }
+        },
         "category": category->{ _id, name, slug }
     }
 `;
