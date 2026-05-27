@@ -31,11 +31,13 @@ if (!article) {
     return Astro.redirect("/404");
 }
 
-const related = await client.fetch<ArticleListItem[]>(QUERY_RELATED_ARTICLES, {
-    categorySlug,
-    subcategory: article.subcategory,
-    currentSlug: slug,
-});
+const related = (
+    await client.fetch<ArticleListItem[]>(QUERY_RELATED_ARTICLES, {
+        categorySlug,
+        subcategory: article.subcategory,
+        currentSlug: slug,
+    })
+).sort((a, b) => a.title.localeCompare(b.title, "pl"));
 ---
 
 <ArticleLayout article={article} related={related} />

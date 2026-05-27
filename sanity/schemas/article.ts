@@ -38,14 +38,6 @@ export const article = defineType({
             validation: (Rule) => Rule.required(),
         }),
         defineField({
-            name: "order",
-            title: "Kolejność",
-            type: "number",
-            description:
-                "Im niższa liczba, tym wyżej artykuł na liście wewnątrz podkategorii. Domyślnie 100.",
-            initialValue: 100,
-        }),
-        defineField({
             name: "coverImage",
             title: "Obrazek nagłówkowy (opcjonalny)",
             type: "image",
@@ -137,21 +129,16 @@ export const article = defineType({
     ],
     orderings: [
         {
-            title: "Kolejność (rosnąco)",
-            name: "orderAsc",
-            by: [{ field: "order", direction: "asc" }],
-        },
-        {
             title: "Tytuł (A→Z)",
             name: "titleAsc",
             by: [{ field: "title", direction: "asc" }],
         },
         {
-            title: "Podkategoria → kolejność",
-            name: "subcategoryThenOrder",
+            title: "Podkategoria → tytuł",
+            name: "subcategoryThenTitle",
             by: [
                 { field: "subcategory", direction: "asc" },
-                { field: "order", direction: "asc" },
+                { field: "title", direction: "asc" },
             ],
         },
     ],

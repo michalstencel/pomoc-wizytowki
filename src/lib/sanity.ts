@@ -40,7 +40,6 @@ export interface ArticleListItem {
     title: string;
     slug: SanitySlug;
     subcategory: string;
-    order: number;
     category: {
         _id: string;
         name: string;
@@ -78,12 +77,11 @@ export const QUERY_ARTICLES_BY_CATEGORY = /* groq */ `
         _type == "article"
         && defined(slug.current)
         && category->slug.current == $slug
-    ] | order(order asc, title asc) {
+    ] | order(title asc) {
         _id,
         title,
         slug,
         subcategory,
-        order,
         "category": category->{ _id, name, slug }
     }
 `;
@@ -98,7 +96,6 @@ export const QUERY_ARTICLE_BY_SLUG = /* groq */ `
         title,
         slug,
         subcategory,
-        order,
         coverImage,
         body,
         "category": category->{ _id, name, slug }
@@ -123,12 +120,11 @@ export const QUERY_RELATED_ARTICLES = /* groq */ `
         && category->slug.current == $categorySlug
         && subcategory == $subcategory
         && slug.current != $currentSlug
-    ] | order(order asc, title asc) {
+    ] | order(title asc) {
         _id,
         title,
         slug,
         subcategory,
-        order,
         "category": category->{ _id, name, slug }
     }
 `;

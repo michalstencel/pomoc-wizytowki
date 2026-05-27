@@ -30,10 +30,11 @@ if (!category) {
     return Astro.redirect("/404");
 }
 
-const articles = await client.fetch<ArticleListItem[]>(
-    QUERY_ARTICLES_BY_CATEGORY,
-    { slug: categorySlug },
-);
+const articles = (
+    await client.fetch<ArticleListItem[]>(QUERY_ARTICLES_BY_CATEGORY, {
+        slug: categorySlug,
+    })
+).sort((a, b) => a.title.localeCompare(b.title, "pl"));
 
 const grouped = articles.reduce(
     (acc, article) => {

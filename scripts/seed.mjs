@@ -67,7 +67,7 @@ const kimJestesmyBody = [
 ];
 
 const articles = [
-    { _id: "article-kim-jestesmy", title: "Kim jesteśmy", slug: "kim-jestesmy", categoryRef: "category-o-nas", subcategory: "O firmie", order: 10, body: kimJestesmyBody },
+    { _id: "article-kim-jestesmy", title: "Kim jesteśmy", slug: "kim-jestesmy", categoryRef: "category-o-nas", subcategory: "O firmie", body: kimJestesmyBody },
 ];
 
 async function seed() {
@@ -95,7 +95,6 @@ async function seed() {
             slug: { _type: "slug", current: art.slug },
             category: { _type: "reference", _ref: art.categoryRef },
             subcategory: art.subcategory,
-            order: art.order,
             body: art.body,
         });
         console.log(`  ${art.title}`);
