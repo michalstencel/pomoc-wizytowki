@@ -995,33 +995,18 @@ textarea {
     max-width: 720px;
 }
 
-/* Wyzeruj domyślne marginy markdown'a — kontrolujemy spacing przez "* + *" niżej */
+/* Spacing markdown'a — klasyczne podejście margin-bottom.
+   Używamy margin-bottom (nie margin-top z "* + *"), bo selektor z tagiem (np. ".article-body p")
+   ma WYŻSZĄ specificity niż ".article-body > * + *" — wcześniejsza próba przegrywała kaskadę. */
 .article-body p,
 .article-body ul,
 .article-body ol,
 .article-body blockquote,
 .article-body pre,
-.article-body h2,
-.article-body h3,
-.article-body h4 {
-    margin: 0;
-}
-
-/* Spacing między blokami (paragrafami, listami, blockquote'ami) — kolejność TUTAJ ma znaczenie:
-   ta reguła musi być PO regule margin: 0 wyżej, żeby ją nadpisać przy tej samej specificity. */
-.article-body > * + * {
-    margin-top: 1.25em;
-}
-
-/* Większe oddychanie przed nagłówkami */
-.article-body > h2 + *,
-.article-body > * + h2 {
-    margin-top: 2em;
-}
-
-.article-body > h3 + *,
-.article-body > * + h3 {
-    margin-top: 1.75em;
+.article-body table,
+.article-body figure,
+.article-body hr {
+    margin: 0 0 1.25em 0;
 }
 
 .article-body h2 {
@@ -1029,12 +1014,31 @@ textarea {
     font-weight: 700;
     color: var(--color-text);
     letter-spacing: -0.01em;
+    margin: 2em 0 0.6em 0;
 }
 
 .article-body h3 {
     font-size: 20px;
     font-weight: 600;
     color: var(--color-text);
+    margin: 1.75em 0 0.5em 0;
+}
+
+.article-body h4 {
+    font-size: 18px;
+    font-weight: 600;
+    color: var(--color-text);
+    margin: 1.5em 0 0.5em 0;
+}
+
+/* Pierwszy element bez górnego marginesu — żeby header nie odjeżdżał od tytułu */
+.article-body > *:first-child {
+    margin-top: 0;
+}
+
+/* Ostatni element bez dolnego marginesu — żeby nie wystawał za .article-body */
+.article-body > *:last-child {
+    margin-bottom: 0;
 }
 
 .article-body a {
