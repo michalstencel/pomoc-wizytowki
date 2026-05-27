@@ -1031,18 +1031,32 @@ textarea {
 
 .article-body a {
     color: var(--color-primary);
-    text-decoration: underline;
-    text-underline-offset: 3px;
+    text-decoration: none;
     transition: color var(--t-base);
 }
 
 .article-body a:hover {
     color: var(--color-primary-dark);
+    text-decoration: underline;
+    text-underline-offset: 3px;
 }
 
 .article-body ul,
 .article-body ol {
     padding-left: 24px;
+}
+
+.article-body ul {
+    list-style: disc;
+}
+
+.article-body ol {
+    list-style: decimal;
+}
+
+.article-body ul li::marker,
+.article-body ol li::marker {
+    color: var(--color-text-muted);
 }
 
 .article-body li + li {
@@ -1111,13 +1125,18 @@ textarea {
     align-items: baseline;
     gap: 8px;
     color: var(--color-primary);
-    text-decoration: underline;
-    text-underline-offset: 3px;
+    text-decoration: none;
     transition: color var(--t-base);
 }
 
 .article-file-link:hover {
     color: var(--color-primary-dark);
+    text-decoration: underline;
+    text-underline-offset: 3px;
+}
+
+.article-file-link:hover .article-file-meta {
+    text-decoration: none;
 }
 
 .article-file-meta {
