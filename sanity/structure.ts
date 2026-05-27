@@ -12,7 +12,7 @@ export const structure = (S: StructureBuilder) =>
                         .defaultOrdering([{ field: "order", direction: "asc" }])
                         .child((categoryId) =>
                             S.documentList()
-                                .id("articles-in-category")
+                                .id(`articles-in-${categoryId}`)
                                 .title("Artykuły")
                                 .schemaType("article")
                                 .filter(
@@ -23,10 +23,10 @@ export const structure = (S: StructureBuilder) =>
                                     { field: "title", direction: "asc" },
                                 ])
                                 .initialValueTemplates([
-                                    S.initialValueTemplateItem(
-                                        "article-by-category",
-                                        { categoryId },
-                                    ),
+                                    S.initialValueTemplateItem({
+                                        id: "article-by-category",
+                                        parameters: { categoryId },
+                                    }),
                                 ])
                                 .canHandleIntent(
                                     (intentName, params) =>
