@@ -127,6 +127,11 @@ export const QUERY_ARTICLE_BY_SLUG = /* groq */ `
         },
         body[]{
             ...,
+            _type == "htmlBlock" => {
+                _type,
+                _key,
+                html
+            },
             markDefs[]{
                 ...,
                 _type == "fileLink" => {
