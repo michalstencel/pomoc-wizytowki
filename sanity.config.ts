@@ -2,6 +2,7 @@ import { defineConfig } from "sanity";
 import { structureTool } from "sanity/structure";
 import { visionTool } from "@sanity/vision";
 import { media } from "sanity-plugin-media";
+import { table } from "@sanity/table";
 import { schemaTypes } from "./sanity/schemas";
 import { structure } from "./sanity/structure";
 
@@ -13,6 +14,7 @@ export default defineConfig({
     plugins: [
         structureTool({ structure }),
         media(),
+        table(),
         visionTool({ defaultApiVersion: "2024-01-01" }),
     ],
     schema: {

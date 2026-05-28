@@ -31,6 +31,7 @@
         "react": "^19.2.6",
         "react-dom": "^19.2.6",
         "sanity": "^5.27.0",
+        "@sanity/table": "^1.1.5",
         "sanity-plugin-media": "^3.0.4",
         "styled-components": "^6.1.13",
         "tailwindcss": "^4.3.0"
