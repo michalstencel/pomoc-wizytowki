@@ -136,12 +136,10 @@ export function HtmlBlockInput(
                             vertical-align: top;
                         }
                         .html-block-preview thead th {
-                            background: #0c111d;
-                            color: #fff;
+                            background: #f4f6fb;
+                            color: #0c111d;
                             font-weight: 700;
-                            text-transform: uppercase;
-                            font-size: 0.8125rem;
-                            letter-spacing: 0.02em;
+                            font-size: 0.875rem;
                         }
                         .html-block-preview tbody tr:nth-child(even) td {
                             background: rgba(244, 246, 251, 0.4);
