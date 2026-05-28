@@ -171,8 +171,6 @@ export const article = defineType({
                 }),
                 defineArrayMember({
                     type: "table",
-                    name: "tableBlock",
-                    title: "Tabela (grid)",
                 }),
                 defineArrayMember({
                     type: "object",

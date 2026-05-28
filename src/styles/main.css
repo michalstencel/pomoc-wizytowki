@@ -1150,10 +1150,30 @@ textarea {
     vertical-align: top;
 }
 
+.article-html-block thead {
+    background: var(--color-bg-dark);
+}
+
 .article-html-block th {
-    background: var(--color-bg-soft);
-    font-weight: 600;
-    color: var(--color-text);
+    background: var(--color-bg-dark);
+    color: #fff;
+    font-weight: 700;
+    font-size: 0.9375rem;
+    letter-spacing: 0.02em;
+    border-bottom: none;
+    text-transform: uppercase;
+}
+
+.article-html-block thead th:first-child {
+    border-top-left-radius: var(--radius-sm);
+}
+
+.article-html-block thead th:last-child {
+    border-top-right-radius: var(--radius-sm);
+}
+
+.article-html-block tbody tr:nth-child(even) td {
+    background: rgba(244, 246, 251, 0.4);
 }
 
 .article-html-block tr:hover td {
