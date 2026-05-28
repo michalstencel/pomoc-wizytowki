@@ -45,10 +45,9 @@ const components: Partial<PortableTextHtmlComponents> = {
             </figure>`;
         },
         htmlBlock: ({ value }) => {
-            const debugDump = `<!-- htmlBlock debug: type=${value?._type}, hasHtml=${typeof value?.html === "string"}, htmlLen=${typeof value?.html === "string" ? value.html.length : 0} -->`;
             const html = typeof value?.html === "string" ? value.html : "";
-            if (!html) return debugDump;
-            return `${debugDump}<div class="article-html-block">${html}</div>`;
+            if (!html) return "";
+            return `<div class="article-html-block">${html}</div>`;
         },
     },
     marks: {
