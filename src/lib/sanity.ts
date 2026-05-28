@@ -67,7 +67,6 @@ export interface RelatedProduct {
 }
 
 export interface Article extends ArticleListItem {
-    coverImage?: SanityImage;
     body?: PortableTextBlock[];
     quickLinksTitle?: string;
     quickLinks?: QuickLink[];
@@ -126,7 +125,6 @@ export const QUERY_ARTICLE_BY_SLUG = /* groq */ `
             "subcategory": subcategory->name,
             "subcategoryRef": subcategory._ref
         },
-        coverImage,
         body[]{
             ...,
             markDefs[]{

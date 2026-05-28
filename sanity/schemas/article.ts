@@ -94,30 +94,6 @@ export const article = defineType({
                     ),
         }),
         defineField({
-            name: "coverImage",
-            title: "Obrazek nagłówkowy (opcjonalny)",
-            type: "image",
-            options: { hotspot: true },
-            description: "Wyświetlany na górze artykułu, nad treścią. Można pominąć.",
-            fields: [
-                defineField({
-                    name: "alt",
-                    type: "string",
-                    title: "Tekst alternatywny (a11y/SEO)",
-                    description:
-                        "Co pokazuje obrazek? Czytniki ekranu i Google używają tego tekstu.",
-                    validation: (Rule) =>
-                        Rule.custom((value, context) => {
-                            const parent = context.parent as { asset?: unknown } | undefined;
-                            if (parent?.asset && !value) {
-                                return "Wpisz tekst alternatywny dla obrazka.";
-                            }
-                            return true;
-                        }),
-                }),
-            ],
-        }),
-        defineField({
             name: "body",
             title: "Treść",
             type: "array",
@@ -193,6 +169,37 @@ export const article = defineType({
                         }),
                     ],
                 }),
+                defineArrayMember({
+                    type: "object",
+                    name: "htmlBlock",
+                    title: "Tabela / blok HTML",
+                    description:
+                        "Wklej tabelę lub dowolny inny fragment HTML. Najwygodniej skopiować gotową tabelę z Google Docs / Word / Excela — przeglądarka przeklei ją jako HTML automatycznie.",
+                    fields: [
+                        defineField({
+                            name: "html",
+                            type: "text",
+                            title: "Kod HTML",
+                            rows: 10,
+                            description:
+                                "Zostanie wstawiony bez zmian na stronie. Wszystkie tagi <table>, <a>, <strong>, <ul> itp. działają.",
+                            validation: (Rule) => Rule.required(),
+                        }),
+                    ],
+                    preview: {
+                        select: { html: "html" },
+                        prepare({ html }) {
+                            const stripped =
+                                typeof html === "string"
+                                    ? html.replace(/<[^>]+>/g, " ").slice(0, 80)
+                                    : "";
+                            return {
+                                title: "Tabela / HTML",
+                                subtitle: stripped || "(pusty)",
+                            };
+                        },
+                    },
+                }),
             ],
         }),
         defineField({
@@ -249,14 +256,12 @@ export const article = defineType({
             firstCategoryName: "placements.0.category.name",
             firstSubcategoryName: "placements.0.subcategory.name",
             placementsCount: "placements",
-            media: "coverImage",
         },
         prepare({
             title,
             firstCategoryName,
             firstSubcategoryName,
             placementsCount,
-            media,
         }) {
             const count = Array.isArray(placementsCount)
                 ? placementsCount.length
@@ -268,7 +273,6 @@ export const article = defineType({
             return {
                 title,
                 subtitle: parts.length ? parts.join(" → ") + extra : "",
-                media,
             };
         },
     },

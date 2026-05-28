@@ -44,6 +44,11 @@ const components: Partial<PortableTextHtmlComponents> = {
                 ${figcaption}
             </figure>`;
         },
+        htmlBlock: ({ value }) => {
+            const html = typeof value?.html === "string" ? value.html : "";
+            if (!html) return "";
+            return `<div class="article-html-block">${html}</div>`;
+        },
     },
     marks: {
         link: ({ children, value }) => {

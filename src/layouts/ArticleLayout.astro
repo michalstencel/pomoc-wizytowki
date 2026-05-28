@@ -6,7 +6,6 @@ import Brands from "../components/Brands.astro";
 import Footer from "../components/Footer.astro";
 import PortableText from "../components/PortableText.astro";
 import {
-    urlForImage,
     type Article,
     type ArticleListItem,
     type Placement,
@@ -22,7 +21,6 @@ const { article, related, currentPlacement } = Astro.props;
 const {
     title,
     body,
-    coverImage,
     quickLinks,
     quickLinksTitle,
     relatedProducts,
@@ -31,11 +29,6 @@ const {
 const categorySlug = currentPlacement.category.slug.current;
 const categoryName = currentPlacement.category.name;
 const subcategoryName = currentPlacement.subcategory;
-
-const coverUrl = coverImage?.asset
-    ? urlForImage(coverImage).width(1600).fit("max").auto("format").url()
-    : null;
-const coverAlt = coverImage?.alt ?? "";
 
 const sortedQuickLinks = (quickLinks ?? [])
     .filter((q) => q && q.slug && q.categorySlug)
@@ -82,18 +75,6 @@ const relatedProductsHeader =
                     </nav>
                     <meta data-pagefind-meta={`kategoria:${categoryName}`} />
                 </div>
-
-                {
-                    coverUrl && (
-                        <img
-                            src={coverUrl}
-                            alt={coverAlt}
-                            class="article-cover"
-                            loading="eager"
-                            decoding="async"
-                        />
-                    )
-                }
 
                 <article class="article-body">
                     <PortableText value={body} />
