@@ -49,6 +49,51 @@ const components: Partial<PortableTextHtmlComponents> = {
             if (!html) return "";
             return `<div class="article-html-block">${html}</div>`;
         },
+        tableBlock: ({ value }) => {
+            const rows = Array.isArray(value?.rows) ? value.rows : [];
+            if (rows.length === 0) return "";
+            const hasHeader = Boolean(value?.hasHeader);
+
+            const renderCell = (
+                cell: { text?: string; link?: string } | undefined,
+                tag: "th" | "td",
+            ) => {
+                const text = escapeHtml(cell?.text ?? "");
+                const link = cell?.link?.trim();
+                if (!text && !link) return `<${tag}></${tag}>`;
+                if (link) {
+                    const safeLink = escapeHtml(link);
+                    const isExternal = /^https?:\/\//i.test(link);
+                    const externalAttrs = isExternal
+                        ? ' target="_blank" rel="noopener noreferrer"'
+                        : "";
+                    return `<${tag}><a href="${safeLink}"${externalAttrs}>${text}</a></${tag}>`;
+                }
+                return `<${tag}>${text}</${tag}>`;
+            };
+
+            const renderRow = (
+                row: { cells?: Array<{ text?: string; link?: string }> },
+                useHeader: boolean,
+            ) => {
+                const cells = Array.isArray(row?.cells) ? row.cells : [];
+                const tag = useHeader ? "th" : "td";
+                return `<tr>${cells.map((c) => renderCell(c, tag)).join("")}</tr>`;
+            };
+
+            let html = '<div class="article-html-block"><table>';
+            if (hasHeader && rows[0]) {
+                html += `<thead>${renderRow(rows[0], true)}</thead>`;
+                html += `<tbody>${rows
+                    .slice(1)
+                    .map((r) => renderRow(r, false))
+                    .join("")}</tbody>`;
+            } else {
+                html += `<tbody>${rows.map((r) => renderRow(r, false)).join("")}</tbody>`;
+            }
+            html += "</table></div>";
+            return html;
+        },
     },
     marks: {
         link: ({ children, value }) => {
