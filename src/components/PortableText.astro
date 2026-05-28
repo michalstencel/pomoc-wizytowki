@@ -49,51 +49,6 @@ const components: Partial<PortableTextHtmlComponents> = {
             if (!html) return "";
             return `<div class="article-html-block">${html}</div>`;
         },
-        table: ({ value }) => {
-            const rows = Array.isArray(value?.rows) ? value.rows : [];
-            if (rows.length === 0) return "";
-
-            const renderCellText = (raw: string): string => {
-                const linkPattern = /\[([^\]]+)\]\(([^)]+)\)/g;
-                let result = "";
-                let lastIdx = 0;
-                let match: RegExpExecArray | null;
-                while ((match = linkPattern.exec(raw)) !== null) {
-                    result += escapeHtml(raw.slice(lastIdx, match.index));
-                    const text = escapeHtml(match[1]);
-                    const url = escapeHtml(match[2]);
-                    const isExternal = /^https?:\/\//i.test(match[2]);
-                    const externalAttrs = isExternal
-                        ? ' target="_blank" rel="noopener noreferrer"'
-                        : "";
-                    result += `<a href="${url}"${externalAttrs}>${text}</a>`;
-                    lastIdx = match.index + match[0].length;
-                }
-                result += escapeHtml(raw.slice(lastIdx));
-                return result;
-            };
-
-            const renderRow = (
-                row: { cells?: string[] } | undefined,
-                tag: "th" | "td",
-            ) => {
-                const cells = Array.isArray(row?.cells) ? row.cells : [];
-                return `<tr>${cells
-                    .map((c) => `<${tag}>${renderCellText(c ?? "")}</${tag}>`)
-                    .join("")}</tr>`;
-            };
-
-            let html = '<div class="article-html-block"><table>';
-            html += `<thead>${renderRow(rows[0], "th")}</thead>`;
-            if (rows.length > 1) {
-                html += `<tbody>${rows
-                    .slice(1)
-                    .map((r) => renderRow(r, "td"))
-                    .join("")}</tbody>`;
-            }
-            html += "</table></div>";
-            return html;
-        },
     },
     marks: {
         link: ({ children, value }) => {

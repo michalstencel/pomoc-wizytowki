@@ -1,4 +1,5 @@
 import { defineType, defineField, defineArrayMember } from "sanity";
+import { HtmlBlockInput } from "../components/HtmlBlockInput";
 
 export const article = defineType({
     name: "article",
@@ -170,22 +171,20 @@ export const article = defineType({
                     ],
                 }),
                 defineArrayMember({
-                    type: "table",
-                }),
-                defineArrayMember({
                     type: "object",
                     name: "htmlBlock",
                     title: "Tabela / blok HTML",
                     description:
-                        "Wklej tabelę lub dowolny inny fragment HTML. Najwygodniej skopiować gotową tabelę z Google Docs / Word / Excela — przeglądarka przeklei ją jako HTML automatycznie.",
+                        "Wklej tabelę z Google Docs/Word/Excel lub edytuj wizualnie w zakładce \"Wizualnie\".",
+                    components: {
+                        input: HtmlBlockInput,
+                    },
                     fields: [
                         defineField({
                             name: "html",
                             type: "text",
                             title: "Kod HTML",
                             rows: 10,
-                            description:
-                                "Zostanie wstawiony bez zmian na stronie. Wszystkie tagi <table>, <a>, <strong>, <ul> itp. działają.",
                             validation: (Rule) => Rule.required(),
                         }),
                     ],
